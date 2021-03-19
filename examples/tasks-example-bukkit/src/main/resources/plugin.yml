@@ -1,0 +1,4 @@
+main: community.leaf.examples.tasks.bukkit.TasksExampleBukkitPlugin
+name: ${project.name}
+version: ${revision}
+api-version: 1.13

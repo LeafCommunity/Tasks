@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>community.leaf.tasks</groupId>
+    <artifactId>tasks-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version> <!-- Change the version number in .mvn/maven.config -->
+
+    <modules>
+        <module>tasks-bukkit</module>
+        <module>tasks-common</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Dependency versions -->
+        <versions.minecraft.spigot>1.16.5-R0.1-SNAPSHOT</versions.minecraft.spigot>
+    </properties>
+
+    <profiles>
+        <!--
+        Development: enabled by default, unless tests are skipped.
+        Includes entire project (including 'example' modules) and skips javadocs.
+
+        If it is disabled by skipping tests with -DskipTests, then the
+        example plugins will not be built and javadocs will be generated.
+        -->
+        <profile>
+            <id>development</id>
+            <activation>
+                <!--
+                Since jitpack will skip tests (-DskipTests), this profile
+                is only active when that property is not set.
+                -->
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <properties>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
+            </properties>
+            <modules>
+                <module>examples</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <!-- Compile project -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <!--
+            Flatten POM versioning so built JARs don't ship
+            with ${revision} properties as their version number.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>oss</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Generate javadocs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <!-- Filter resource files -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>
