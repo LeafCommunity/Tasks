@@ -6,6 +6,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class BukkitTaskContext extends WrappedTaskContext<BukkitTask>
 {
+    public BukkitTaskContext(long repetitions) { super(repetitions); }
+    
     @Override
     public boolean isCancelled() { return getTask().isCancelled(); }
     

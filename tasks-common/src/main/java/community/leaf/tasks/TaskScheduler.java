@@ -3,7 +3,7 @@ package community.leaf.tasks;
 @SuppressWarnings("UnusedReturnValue")
 public interface TaskScheduler<T>
 {
-    WrappedTaskContext<T> createTaskContext();
+    WrappedTaskContext<T> createTaskContext(long repetitions);
     
     T runTask(Concurrency concurrency, Runnable runnable);
     
@@ -11,7 +11,7 @@ public interface TaskScheduler<T>
     
     T runRecurringTask(Concurrency concurrency, Runnable runnable, long delay, long period);
     
-    default T schedule(Schedulable when, Runnable runnable)
+    default T schedule(TickSchedulable when, Runnable runnable)
     {
         if (when.isRecurring())
         {
@@ -27,13 +27,13 @@ public interface TaskScheduler<T>
         }
     }
     
-    default T schedule(Schedulable when, ContextualRunnable runnable)
+    default T schedule(TickSchedulable when, ContextualRunnable runnable)
     {
-        WrappedTaskContext<T> context = createTaskContext();
+        WrappedTaskContext<T> context = createTaskContext(when.getRepetitions());
         
         T task = schedule(when, () -> {
             runnable.run(context);
-            context.incrementIterations();
+            context.iterate();
         });
         
         context.wrap(task);

@@ -1,6 +1,6 @@
 package community.leaf.tasks;
 
-public interface Schedulable
+public interface TickSchedulable
 {
     Concurrency getConcurrency();
     
@@ -13,4 +13,8 @@ public interface Schedulable
     long getPeriod();
     
     default boolean isRecurring() { return getPeriod() > 0; }
+    
+    long getRepetitions();
+    
+    default boolean isRepeating() { return getRepetitions() > 0; }
 }

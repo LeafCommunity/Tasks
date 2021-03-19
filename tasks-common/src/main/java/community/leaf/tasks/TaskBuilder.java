@@ -1,9 +1,10 @@
 package community.leaf.tasks;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("UnusedReturnValue")
-public abstract class TaskBuilder<B extends TaskBuilder<B>> implements Schedulable
+public abstract class TaskBuilder<B extends TaskBuilder<B>> implements TickSchedulable
 {
     protected final TaskScheduler<?> scheduler;
     
@@ -31,6 +32,11 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements Schedulab
         return self();
     }
     
+    public B delay(long duration, TimeUnit unit)
+    {
+        return delay(Ticks.from(duration, unit));
+    }
+    
     @Override
     public long getPeriod() { return period; }
     
@@ -38,6 +44,16 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements Schedulab
     {
         period = ticks;
         return self();
+    }
+    
+    public B every(long duration, TimeUnit unit)
+    {
+        return every(Ticks.from(duration, unit));
+    }
+    
+    public long getRepetitions()
+    {
+        return repetitions;
     }
     
     public B repeat(long iterations)
@@ -53,7 +69,7 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements Schedulab
         if (repetitions > 0)
         {
             scheduler.schedule(this, task -> {
-                if (task.getIterations() >= repetitions) { task.cancel(); }
+                if (task.isDoneRepeating()) { task.cancel(); }
                 else { runnable.run(); }
             });
         }
@@ -71,7 +87,7 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements Schedulab
         if (repetitions > 0)
         {
             scheduler.schedule(this, task -> {
-                if (task.getIterations() >= repetitions) { task.cancel(); }
+                if (task.isDoneRepeating()) { task.cancel(); }
                 else { runnable.run(task); }
             });
         }

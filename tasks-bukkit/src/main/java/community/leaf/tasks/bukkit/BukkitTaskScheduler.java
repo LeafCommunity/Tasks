@@ -12,9 +12,9 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     Plugin getPlugin();
     
     @Override
-    default BukkitTaskContext createTaskContext()
+    default BukkitTaskContext createTaskContext(long repetitions)
     {
-        return new BukkitTaskContext();
+        return new BukkitTaskContext(repetitions);
     }
     
     @Override

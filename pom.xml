@@ -52,7 +52,7 @@
     </profiles>
 
     <build>
-        <defaultGoal>package</defaultGoal>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <!-- Compile project -->
             <plugin>
