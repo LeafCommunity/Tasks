@@ -21,7 +21,7 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
         
         sync().delay(1, TimeUnit.SECONDS)
             .repeat(5)
-            .every(6, TimeUnit.SECONDS)
+            .every(3, TimeUnit.SECONDS)
             .runWithContext(task -> {
                 if (task.isFirstIteration()) { getLogger().info(ChatColor.GREEN + "FIRST ITERATION!"); }
                 getLogger().info("Task iterations so far: " + ChatColor.GREEN + task.getIterations());

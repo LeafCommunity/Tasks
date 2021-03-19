@@ -50,7 +50,7 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     }
     
     @Override
-    default BukkitTask runRecurringTask(Concurrency concurrency, Runnable runnable, long delay, long period)
+    default BukkitTask runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
         Plugin plugin = getPlugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();

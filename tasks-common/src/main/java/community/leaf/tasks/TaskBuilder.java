@@ -51,10 +51,8 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements TickSched
         return every(Ticks.from(duration, unit));
     }
     
-    public long getRepetitions()
-    {
-        return repetitions;
-    }
+    @Override
+    public long getRepetitions() { return repetitions; }
     
     public B repeat(long iterations)
     {

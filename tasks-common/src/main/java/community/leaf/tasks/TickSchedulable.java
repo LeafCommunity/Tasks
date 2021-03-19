@@ -12,9 +12,9 @@ public interface TickSchedulable
     
     long getPeriod();
     
-    default boolean isRecurring() { return getPeriod() > 0; }
+    default boolean isRepeating() { return getPeriod() > 0; }
     
     long getRepetitions();
     
-    default boolean isRepeating() { return getRepetitions() > 0; }
+    default boolean hasFiniteRepetitions() { return getRepetitions() > 0; }
 }

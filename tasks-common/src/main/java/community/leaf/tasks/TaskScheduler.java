@@ -9,13 +9,13 @@ public interface TaskScheduler<T>
     
     T runFutureTask(Concurrency concurrency, Runnable runnable, long delay);
     
-    T runRecurringTask(Concurrency concurrency, Runnable runnable, long delay, long period);
+    T runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period);
     
     default T schedule(TickSchedulable when, Runnable runnable)
     {
-        if (when.isRecurring())
+        if (when.isRepeating())
         {
-            return runRecurringTask(when.getConcurrency(), runnable, when.getDelay(), when.getPeriod());
+            return runRepeatingTask(when.getConcurrency(), runnable, when.getDelay(), when.getPeriod());
         }
         else if (when.isDelayed())
         {
