@@ -18,10 +18,7 @@ public abstract class TaskBuilder<B extends TaskBuilder<B>> implements TickSched
     }
     
     @SuppressWarnings("unchecked")
-    protected final B self()
-    {
-        return (B) this;
-    }
+    protected final B self() { return (B) this; }
     
     @Override
     public long getDelay() { return delay; }

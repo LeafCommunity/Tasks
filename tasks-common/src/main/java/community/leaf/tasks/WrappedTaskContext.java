@@ -24,20 +24,11 @@ public abstract class WrappedTaskContext<T> implements TaskContext
     
     public void wrap(T unwrapped) { this.wrapped = unwrapped; }
     
-    @Override
-    public long getIterations() { return iterations; }
-    
     public void iterate() { iterations += 1; }
     
     @Override
+    public long getIterations() { return iterations; }
+    
+    @Override
     public long getExpectedIterations() { return expectedIterations; }
-    
-    @Override
-    public boolean isRepeatingForever() { return expectedIterations <= -1; }
-    
-    @Override
-    public boolean isRepeatingFinitely() { return expectedIterations > 1; }
-    
-    @Override
-    public boolean isDoneRepeating() { return isCancelled() || iterations >= expectedIterations; }
 }

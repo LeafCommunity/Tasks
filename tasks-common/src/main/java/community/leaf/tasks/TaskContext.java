@@ -4,32 +4,23 @@ public interface TaskContext
 {
     long getIterations();
     
+    long getExpectedIterations();
+    
     boolean isCancelled();
     
     void cancel();
     
     Concurrency getConcurrency();
     
-    long getExpectedIterations();
+    default boolean isRepeatingForever() { return getExpectedIterations() <= -1; }
     
-    boolean isRepeatingForever();
+    default boolean isRepeatingFinitely() { return getExpectedIterations() > 1; }
     
-    boolean isRepeatingFinitely();
+    default boolean isRepeating() { return isRepeatingForever() || isRepeatingFinitely(); }
     
-    boolean isDoneRepeating();
+    default boolean isDoneRepeating() { return isCancelled() || getIterations() >= getExpectedIterations(); }
     
-    default boolean isRepeating()
-    {
-        return isRepeatingForever() || isRepeatingFinitely();
-    }
+    default boolean isFirstIteration() { return getIterations() == 0; }
     
-    default boolean isFirstIteration()
-    {
-        return getIterations() == 0;
-    }
-    
-    default boolean isLastIteration()
-    {
-        return isRepeatingFinitely() && getIterations() == getExpectedIterations() - 1;
-    }
+    default boolean isLastIteration() { return isRepeatingFinitely() && getIterations() == getExpectedIterations() - 1; }
 }
