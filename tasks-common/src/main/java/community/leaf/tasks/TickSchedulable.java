@@ -4,8 +4,6 @@ public interface TickSchedulable
 {
     Concurrency getConcurrency();
     
-    boolean isAsync();
-    
     long getDelay();
     
     default boolean isDelayed() { return getDelay() > 0; }

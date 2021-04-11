@@ -10,13 +10,14 @@
     <version>${revision}</version> <!-- Change the version number in .mvn/maven.config -->
 
     <modules>
-        <module>tasks-bukkit</module>
         <module>tasks-common</module>
+        <module>tasks-bukkit</module>
+        <module>tasks-common-minecraft</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency versions -->
@@ -50,6 +51,16 @@
             </modules>
         </profile>
     </profiles>
+
+    <dependencies>
+        <!-- Nullness Annotations: @NullOr (via maven-central) -->
+        <dependency>
+            <groupId>pl.tlinkowski.annotation</groupId>
+            <artifactId>pl.tlinkowski.annotation.basic</artifactId>
+            <version>0.2.0</version>
+            <!-- Note: scope must be visible to dependent projects otherwise nullness annotations will not work as intended -->
+        </dependency>
+    </dependencies>
 
     <build>
         <defaultGoal>install</defaultGoal>
@@ -101,6 +112,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

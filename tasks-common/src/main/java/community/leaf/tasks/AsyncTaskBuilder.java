@@ -6,7 +6,4 @@ public class AsyncTaskBuilder extends TaskBuilder<AsyncTaskBuilder>
     
     @Override
     public final Concurrency getConcurrency() { return Concurrency.ASYNC; }
-    
-    @Override
-    public final boolean isAsync() { return true; }
 }

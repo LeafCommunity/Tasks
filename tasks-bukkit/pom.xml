@@ -12,12 +12,6 @@
 
     <artifactId>tasks-bukkit</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <repositories>
         <repository>
             <id>spigot-repo</id>
@@ -26,21 +20,17 @@
     </repositories>
 
     <dependencies>
-        <!--
-        Spigot API (via spigot-repo)
-        -->
+        <!-- Spigot API (via spigot-repo) -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${versions.minecraft.spigot}</version>
             <scope>provided</scope>
         </dependency>
-        <!--
-        Tasks Common (via local project)
-        -->
+        <!-- Tasks Common Minecraft (via local project) -->
         <dependency>
             <groupId>community.leaf.tasks</groupId>
-            <artifactId>tasks-common</artifactId>
+            <artifactId>tasks-common-minecraft</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
