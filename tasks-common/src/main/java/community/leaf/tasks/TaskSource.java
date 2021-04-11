@@ -1,11 +1,8 @@
 package community.leaf.tasks;
 
 @FunctionalInterface
-public interface TaskSource
+public interface TaskSource extends TaskBuilderSource<TaskBuilder>
 {
-    TaskScheduler<?> getTaskScheduler();
-    
-    default SyncTaskBuilder sync() { return new SyncTaskBuilder(getTaskScheduler()); }
-    
-    default AsyncTaskBuilder async() { return new AsyncTaskBuilder(getTaskScheduler()); }
+    @Override
+    default TaskBuilderConstructor<TaskBuilder> getTaskBuilderConstructor() { return TaskBuilder::new; }
 }

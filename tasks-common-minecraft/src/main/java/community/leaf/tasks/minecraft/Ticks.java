@@ -1,4 +1,4 @@
-package community.leaf.tasks;
+package community.leaf.tasks.minecraft;
 
 import java.util.concurrent.TimeUnit;
 

@@ -4,23 +4,41 @@ public class Tasks
 {
     private Tasks() { throw new UnsupportedOperationException(); }
     
-    public static SyncTaskBuilder sync(TaskScheduler<?> scheduler)
+     public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> B
+        create(TaskBuilderConstructor<B> constructor, Concurrency concurrency, TaskScheduler<?> scheduler)
     {
-        return new SyncTaskBuilder(scheduler);
+        return constructor.constructTaskBuilder(concurrency, scheduler);
     }
     
-    public static SyncTaskBuilder sync(TaskSource source)
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> B
+        sync(TaskBuilderConstructor<B> constructor, TaskScheduler<?> scheduler)
     {
-        return sync(source.getTaskScheduler());
+        return create(constructor, Concurrency.SYNC, scheduler);
     }
     
-    public static AsyncTaskBuilder async(TaskScheduler<?> scheduler)
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> B sync(TaskBuilderSource<B> source)
     {
-        return new AsyncTaskBuilder(scheduler);
+        return sync(source.getTaskBuilderConstructor(), source.getTaskScheduler());
     }
     
-    public static AsyncTaskBuilder async(TaskSource source)
+    public static TaskBuilder sync(TaskScheduler<?> scheduler)
     {
-        return async(source.getTaskScheduler());
+        return sync(TaskBuilder::new, scheduler);
+    }
+    
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> B
+        async(TaskBuilderConstructor<B> constructor, TaskScheduler<?> scheduler)
+    {
+        return create(constructor, Concurrency.ASYNC, scheduler);
+    }
+    
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> B async(TaskBuilderSource<B> source)
+    {
+        return async(source.getTaskBuilderConstructor(), source.getTaskScheduler());
+    }
+    
+    public static TaskBuilder async(TaskScheduler<?> scheduler)
+    {
+        return async(TaskBuilder::new, scheduler);
     }
 }

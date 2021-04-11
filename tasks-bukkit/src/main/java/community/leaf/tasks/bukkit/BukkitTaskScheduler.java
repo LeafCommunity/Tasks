@@ -2,9 +2,12 @@ package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.TaskScheduler;
+import community.leaf.tasks.minecraft.Ticks;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.concurrent.TimeUnit;
 
 @FunctionalInterface
 public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
@@ -41,11 +44,15 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     
         if (concurrency == Concurrency.SYNC)
         {
-            return scheduler.runTaskLater(plugin, runnable, delay);
+            return scheduler.runTaskLater(
+                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS)
+            );
         }
         else
         {
-            return scheduler.runTaskLaterAsynchronously(plugin, runnable, delay);
+            return scheduler.runTaskLaterAsynchronously(
+                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS)
+            );
         }
     }
     
@@ -57,11 +64,15 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     
         if (concurrency == Concurrency.SYNC)
         {
-            return scheduler.runTaskTimer(plugin, runnable, delay, period);
+            return scheduler.runTaskTimer(
+                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS), Ticks.from(delay, TimeUnit.MILLISECONDS)
+            );
         }
         else
         {
-            return scheduler.runTaskTimerAsynchronously(plugin, runnable, delay, period);
+            return scheduler.runTaskTimerAsynchronously(
+                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS), Ticks.from(delay, TimeUnit.MILLISECONDS)
+            );
         }
     }
 }

@@ -11,7 +11,7 @@ public interface TaskScheduler<T>
     
     T runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period);
     
-    default T schedule(TickSchedulable when, Runnable runnable)
+    default T schedule(Schedulable when, Runnable runnable)
     {
         if (when.isRepeating())
         {
@@ -27,7 +27,7 @@ public interface TaskScheduler<T>
         }
     }
     
-    default T schedule(TickSchedulable when, ContextualRunnable runnable)
+    default T schedule(Schedulable when, ContextualRunnable runnable)
     {
         WrappedTaskContext<T> context = createTaskContext(when.getRepetitions());
         

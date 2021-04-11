@@ -6,8 +6,6 @@ import community.leaf.tasks.bukkit.BukkitTaskSource;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.concurrent.TimeUnit;
-
 public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSource
 {
     @Override
@@ -17,11 +15,11 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
             getLogger().info(ChatColor.LIGHT_PURPLE + "Tasks Example Bukkit Plugin: success!")
         );
     
-        Tasks.sync(this).delay(10).run(() -> getLogger().info("10 ticks later..."));
+        Tasks.sync(this).delay(10).ticks().run(() -> getLogger().info("10 ticks later..."));
         
-        sync().delay(1, TimeUnit.SECONDS)
+        sync().delay(1).seconds()
             .repeat(5)
-            .every(3, TimeUnit.SECONDS)
+            .every(3).seconds()
             .runWithContext(task -> {
                 if (task.isFirstIteration()) { getLogger().info(ChatColor.GREEN + "FIRST ITERATION!"); }
                 getLogger().info("Task iterations so far: " + ChatColor.GREEN + task.getIterations());

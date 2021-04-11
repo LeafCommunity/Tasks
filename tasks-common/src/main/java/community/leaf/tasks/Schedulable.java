@@ -1,6 +1,6 @@
 package community.leaf.tasks;
 
-public interface TickSchedulable
+public interface Schedulable
 {
     Concurrency getConcurrency();
     
