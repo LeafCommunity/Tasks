@@ -1,5 +1,6 @@
 package community.leaf.tasks;
 
+@SuppressWarnings("unused")
 public interface TaskContext
 {
     long getIterations();
@@ -18,14 +19,18 @@ public interface TaskContext
     
     default boolean isRepeating() { return getExpectedRepetitions().until() != Repeats.NEVER; }
     
-    default boolean isDoneRepeating() { return isCancelled() || getIterations() >= getExpectedRepetitions().repetitions(); }
+    default boolean isDoneRepeating()
+    {
+        Repeats.Expected expected = getExpectedRepetitions();
+        return (isCancelled()) || (expected.until() != Repeats.FOREVER && getIterations() >= expected.repetitions());
+    }
     
     default boolean isFirstIteration() { return getIterations() == 0; }
     
     default boolean isLastIteration()
     {
-        Repeats mode = getExpectedRepetitions().until();
-        return (mode == Repeats.NEVER)
-            || (mode == Repeats.FINITE && getIterations() == getExpectedRepetitions().repetitions());
+        Repeats.Expected expected = getExpectedRepetitions();
+        return (expected.until() == Repeats.NEVER)
+            || (expected.until() == Repeats.FINITE && getIterations() == expected.repetitions() - 1);
     }
 }
