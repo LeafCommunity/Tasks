@@ -3,6 +3,7 @@ package community.leaf.tasks;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class PendingMilliseconds<B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
 {
     protected final Function<Long, B> pendingFunction;

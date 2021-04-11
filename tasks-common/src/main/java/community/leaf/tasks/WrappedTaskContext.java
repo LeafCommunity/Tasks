@@ -9,26 +9,30 @@ public abstract class WrappedTaskContext<T> implements TaskContext
     private long iterations = 0;
     private @NullOr T wrapped = null;
     
-    private final long expectedIterations;
+    private final Repeats.Expected repetitions;
     
-    public WrappedTaskContext(long repetitions)
+    public WrappedTaskContext(Repeats.Expected repetitions)
     {
-        // (-Inf, -1] => forever
-        // [0, 1]     => once
-        // (1, Inf)   => finite
-        this.expectedIterations = (repetitions <= -1) ? -1 : (repetitions == 0) ? 1 : repetitions;
+        this.repetitions = Objects.requireNonNull(repetitions, "repetitions");
     }
     
-    @SuppressWarnings("ConstantConditions")
-    public T getTask() { return Objects.requireNonNull(wrapped, "wrapped task not initialized"); }
+    @Override
+    public final long getIterations() { return this.iterations; }
     
-    public void wrap(T unwrapped) { this.wrapped = unwrapped; }
-    
-    public void iterate() { iterations += 1; }
+    public final void iterate() { this.iterations += 1; }
     
     @Override
-    public long getIterations() { return iterations; }
+    public final Repeats.Expected getExpectedRepetitions() { return repetitions; }
     
-    @Override
-    public long getExpectedIterations() { return expectedIterations; }
+    public final T getTask()
+    {
+        if (this.wrapped != null) { return this.wrapped; }
+        throw new IllegalStateException("No task wrapped yet.");
+    }
+    
+    public final T wrap(T unwrapped)
+    {
+        if (this.wrapped == null) { return this.wrapped = Objects.requireNonNull(unwrapped, "unwrapped"); }
+        throw new IllegalStateException("Already contains a wrapped task.");
+    }
 }

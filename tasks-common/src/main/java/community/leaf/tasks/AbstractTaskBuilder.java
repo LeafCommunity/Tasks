@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P extends PendingMilliseconds<B>> implements Schedulable
 {
     protected final Concurrency concurrency;
@@ -12,7 +12,8 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     
     private long delay;
     private long period;
-    private long repetitions;
+    
+    private Repeats.Expected repetitions = Repeats.Constant.NEVER;
     
     public AbstractTaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
     {
@@ -52,6 +53,7 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     
     public B everyFewMilliseconds(long milliseconds)
     {
+        if (repetitions.until() == Repeats.NEVER) { repetitions = Repeats.Constant.FOREVER; }
         period = milliseconds;
         return self();
     }
@@ -67,11 +69,11 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     }
     
     @Override
-    public long getRepetitions() { return repetitions; }
+    public Repeats.Expected getRepetitions() { return repetitions; }
     
     public B repeat(long iterations)
     {
-        repetitions = iterations;
+        repetitions = Repeats.from(iterations);
         return self();
     }
     
@@ -79,7 +81,7 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     {
         Objects.requireNonNull(runnable, "runnable");
         
-        if (repetitions > 0)
+        if (repetitions.until() == Repeats.FINITE)
         {
             scheduler.schedule(this, task -> {
                 if (task.isDoneRepeating()) { task.cancel(); }
@@ -97,7 +99,7 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     {
         Objects.requireNonNull(runnable, "runnable");
         
-        if (repetitions > 0)
+        if (repetitions.until() == Repeats.FINITE)
         {
             scheduler.schedule(this, task -> {
                 if (task.isDoneRepeating()) { task.cancel(); }

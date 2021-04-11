@@ -4,6 +4,8 @@ import community.leaf.tasks.Tasks;
 import community.leaf.tasks.bukkit.BukkitTaskScheduler;
 import community.leaf.tasks.bukkit.BukkitTaskSource;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSource
@@ -29,4 +31,15 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     
     @Override
     public BukkitTaskScheduler getTaskScheduler() { return () -> this; }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        sync().repeat(5)
+            .runWithContext(task -> {
+                sender.sendMessage("Test: " + task.getIterations());
+            });
+        
+        return true;
+    }
 }

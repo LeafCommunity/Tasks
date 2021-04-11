@@ -4,7 +4,7 @@ public interface TaskContext
 {
     long getIterations();
     
-    long getExpectedIterations();
+    Repeats.Expected getExpectedRepetitions();
     
     boolean isCancelled();
     
@@ -12,15 +12,20 @@ public interface TaskContext
     
     Concurrency getConcurrency();
     
-    default boolean isRepeatingForever() { return getExpectedIterations() <= -1; }
+    default boolean isRepeatingForever() { return getExpectedRepetitions().until() == Repeats.FOREVER; }
     
-    default boolean isRepeatingFinitely() { return getExpectedIterations() > 1; }
+    default boolean isRepeatingFinitely() { return getExpectedRepetitions().until() == Repeats.FINITE; }
     
-    default boolean isRepeating() { return isRepeatingForever() || isRepeatingFinitely(); }
+    default boolean isRepeating() { return getExpectedRepetitions().until() != Repeats.NEVER; }
     
-    default boolean isDoneRepeating() { return isCancelled() || getIterations() >= getExpectedIterations(); }
+    default boolean isDoneRepeating() { return isCancelled() || getIterations() >= getExpectedRepetitions().repetitions(); }
     
     default boolean isFirstIteration() { return getIterations() == 0; }
     
-    default boolean isLastIteration() { return isRepeatingFinitely() && getIterations() == getExpectedIterations() - 1; }
+    default boolean isLastIteration()
+    {
+        Repeats mode = getExpectedRepetitions().until();
+        return (mode == Repeats.NEVER)
+            || (mode == Repeats.FINITE && getIterations() == getExpectedRepetitions().repetitions());
+    }
 }

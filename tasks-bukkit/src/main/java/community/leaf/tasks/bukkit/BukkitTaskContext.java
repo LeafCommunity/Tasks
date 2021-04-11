@@ -1,12 +1,13 @@
 package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
+import community.leaf.tasks.Repeats;
 import community.leaf.tasks.WrappedTaskContext;
 import org.bukkit.scheduler.BukkitTask;
 
 public class BukkitTaskContext extends WrappedTaskContext<BukkitTask>
 {
-    public BukkitTaskContext(long repetitions) { super(repetitions); }
+    public BukkitTaskContext(Repeats.Expected repetitions) { super(repetitions); }
     
     @Override
     public boolean isCancelled() { return getTask().isCancelled(); }

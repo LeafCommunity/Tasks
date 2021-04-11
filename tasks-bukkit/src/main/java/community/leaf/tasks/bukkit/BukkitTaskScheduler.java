@@ -1,6 +1,7 @@
 package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
+import community.leaf.tasks.Repeats;
 import community.leaf.tasks.TaskScheduler;
 import community.leaf.tasks.minecraft.Ticks;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +16,7 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     Plugin getPlugin();
     
     @Override
-    default BukkitTaskContext createTaskContext(long repetitions)
+    default BukkitTaskContext createTaskContext(Repeats.Expected repetitions)
     {
         return new BukkitTaskContext(repetitions);
     }
