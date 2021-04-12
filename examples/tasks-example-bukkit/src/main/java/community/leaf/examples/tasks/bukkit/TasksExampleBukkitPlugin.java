@@ -5,23 +5,15 @@ import community.leaf.tasks.bukkit.BukkitTaskSource;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
-
-public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSource, Listener
+public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSource
 {
     @Override
     public void onEnable()
     {
-        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new SessionListener(this), this);
         
         sync().run(() ->
             getLogger().info(ChatColor.LIGHT_PURPLE + "Tasks Example Bukkit Plugin: success!")
@@ -49,28 +41,5 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
             });
         
         return true;
-    }
-    
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event)
-    {
-        Player player = event.getPlayer();
-        sessions().start(player);
-        
-        sync().every(15).seconds().forever()
-            .unless(sessions().expired(player))
-            .runWithContext(task ->
-            {
-                Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
-                String random = String.valueOf(colors[ThreadLocalRandom.current().nextInt(colors.length)]);
-                
-                player.sendMessage(random + "Hello. " + ChatColor.ITALIC + "#" + (task.getIterations() + 1));
-            });
-    }
-    
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
-        sessions().end(event.getPlayer());
     }
 }
