@@ -1,5 +1,6 @@
 package community.leaf.tasks.bukkit;
 
+import community.leaf.tasks.Unless;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -33,6 +34,12 @@ public class PlayerSession
         }
         
         return Optional.empty();
+    }
+    
+    public static Unless expires(Plugin plugin, Player player)
+    {
+        PlayerSession session = getOrStart(plugin, player);
+        return session::isExpired;
     }
     
     public static PlayerSession getOrStart(Plugin plugin, Player player)

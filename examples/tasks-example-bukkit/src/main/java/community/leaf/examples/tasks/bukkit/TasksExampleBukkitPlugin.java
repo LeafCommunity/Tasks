@@ -56,17 +56,12 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        PlayerSession session = PlayerSession.getOrStart(this, player);
+        PlayerSession.start(this, player);
         
         sync().every(15).seconds().forever()
+            .unless(PlayerSession.expires(this, player))
             .runWithContext(task ->
             {
-                if (session.isExpired())
-                {
-                    task.cancel();
-                    return;
-                }
-                
                 Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
                 String random = String.valueOf(colors[ThreadLocalRandom.current().nextInt(colors.length)]);
                 
