@@ -8,14 +8,23 @@ import org.bukkit.plugin.Plugin;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.Optional;
 
 public class PlayerSession
 {
     public static final String KEY = PlayerSession.class.getName();
     
+    private static void validate(Plugin plugin, Player player)
+    {
+        Objects.requireNonNull(plugin, "plugin");
+        Objects.requireNonNull(player, "player");
+    }
+    
     public static PlayerSession start(Plugin plugin, Player player)
     {
+        validate(plugin, player);
+        
         PlayerSession session = new PlayerSession(plugin, player);
         player.setMetadata(KEY, new FixedMetadataValue(plugin, session));
         return session;
@@ -23,6 +32,8 @@ public class PlayerSession
     
     public static Optional<PlayerSession> get(Plugin plugin, Player player)
     {
+        validate(plugin, player);
+        
         for (MetadataValue meta : player.getMetadata(KEY))
         {
             if (!plugin.equals(meta.getOwningPlugin())) { continue; }
@@ -36,20 +47,33 @@ public class PlayerSession
         return Optional.empty();
     }
     
-    public static Unless expires(Plugin plugin, Player player)
-    {
-        PlayerSession session = getOrStart(plugin, player);
-        return session::isExpired;
-    }
-    
     public static PlayerSession getOrStart(Plugin plugin, Player player)
     {
+        // validated in get() and start()
         return get(plugin, player).orElseGet(() -> start(plugin, player));
     }
     
     public static void end(Plugin plugin, Player player)
     {
+        validate(plugin, player);
         player.removeMetadata(KEY, plugin);
+    }
+    
+    public static Unless expired(Plugin plugin, Player player)
+    {
+        // validated in getOrStart()
+        PlayerSession session = getOrStart(plugin, player);
+        return session::isExpired;
+    }
+    
+    private static boolean isPluginValid(@NullOr Plugin plugin)
+    {
+        return plugin != null && plugin.isEnabled();
+    }
+    
+    private static boolean isPlayerOnline(@NullOr Player player)
+    {
+        return player != null && player.isOnline();
     }
     
     private final WeakReference<Plugin> pluginReference;
@@ -61,37 +85,28 @@ public class PlayerSession
         this.playerReference = new WeakReference<>(player);
     }
     
-    public boolean pluginIsValid()
-    {
-        @NullOr Plugin plugin = pluginReference.get();
-        return plugin != null && plugin.isEnabled();
-    }
+    public @NullOr Plugin pluginOrNull() { return pluginReference.get(); }
     
-    public Plugin plugin()
-    {
-        @NullOr Plugin plugin = pluginReference.get();
-        if (plugin != null) { return plugin; }
-        throw new IllegalStateException("Plugin has unloaded.");
-    }
-    
-    public Optional<Player> player() { return Optional.ofNullable(playerReference.get()); }
+    public @NullOr Player playerOrNull() { return playerReference.get(); }
     
     public void end()
     {
-        @NullOr Player player = player().orElse(null);
-        if (player == null || !pluginIsValid()) { return; }
+        @NullOr Plugin plugin = pluginOrNull();
+        @NullOr Player player = playerOrNull();
         
-        if (PlayerSession.get(plugin(), player).filter(this::equals).isPresent())
-        {
-            player.removeMetadata(KEY, plugin());
-        }
+        if (player == null || !isPluginValid(plugin)) { return; }
+        if (PlayerSession.get(plugin, player).filter(this::equals).isEmpty()) { return; }
+        
+        player.removeMetadata(KEY, plugin);
     }
     
     public boolean isActive()
     {
-        @NullOr Player player = player().orElse(null);
-        return player != null && player.isOnline() && pluginIsValid() &&
-            this.equals(PlayerSession.get(plugin(), player).orElse(null));
+        @NullOr Plugin plugin = pluginOrNull();
+        @NullOr Player player = playerOrNull();
+        
+        return isPlayerOnline(player) && isPluginValid(plugin) &&
+            PlayerSession.get(plugin, player).filter(this::equals).isPresent();
     }
     
     public boolean isExpired() { return !isActive(); }

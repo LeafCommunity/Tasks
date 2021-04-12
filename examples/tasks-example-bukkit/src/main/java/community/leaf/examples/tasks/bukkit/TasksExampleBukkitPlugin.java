@@ -1,9 +1,7 @@
 package community.leaf.examples.tasks.bukkit;
 
 import community.leaf.tasks.Tasks;
-import community.leaf.tasks.bukkit.BukkitTaskScheduler;
 import community.leaf.tasks.bukkit.BukkitTaskSource;
-import community.leaf.tasks.bukkit.PlayerSession;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
@@ -39,7 +38,7 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     }
     
     @Override
-    public BukkitTaskScheduler getTaskScheduler() { return () -> this; }
+    public Plugin plugin() { return this; }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -56,10 +55,10 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        PlayerSession.start(this, player);
+        sessions().start(player);
         
         sync().every(15).seconds().forever()
-            .unless(PlayerSession.expires(this, player))
+            .unless(sessions().expired(player))
             .runWithContext(task ->
             {
                 Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
@@ -72,7 +71,6 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        PlayerSession.end(this, event.getPlayer());
+        sessions().end(event.getPlayer());
     }
-    
 }

@@ -22,7 +22,7 @@ public interface BukkitTaskScheduler extends PluginProvider, TaskScheduler<Bukki
     @Override
     default BukkitTask runTask(Concurrency concurrency, Runnable runnable)
     {
-        Plugin plugin = getPlugin();
+        Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
     
         if (concurrency == Concurrency.SYNC)
@@ -38,7 +38,7 @@ public interface BukkitTaskScheduler extends PluginProvider, TaskScheduler<Bukki
     @Override
     default BukkitTask runFutureTask(Concurrency concurrency, Runnable runnable, long delay)
     {
-        Plugin plugin = getPlugin();
+        Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
         
@@ -55,7 +55,7 @@ public interface BukkitTaskScheduler extends PluginProvider, TaskScheduler<Bukki
     @Override
     default BukkitTask runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
-        Plugin plugin = getPlugin();
+        Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
         long periodInTicks = Ticks.from(period, TimeUnit.MILLISECONDS);
