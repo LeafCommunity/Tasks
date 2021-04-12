@@ -11,10 +11,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.concurrent.TimeUnit;
 
 @FunctionalInterface
-public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
+public interface BukkitTaskScheduler extends PluginProvider, TaskScheduler<BukkitTask>
 {
-    Plugin getPlugin();
-    
     @Override
     default BukkitTaskContext createTaskContext(Repeats.Expected repetitions)
     {
@@ -42,18 +40,15 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     {
         Plugin plugin = getPlugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
-    
+        long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
+        
         if (concurrency == Concurrency.SYNC)
         {
-            return scheduler.runTaskLater(
-                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS)
-            );
+            return scheduler.runTaskLater(plugin, runnable, delayInTicks);
         }
         else
         {
-            return scheduler.runTaskLaterAsynchronously(
-                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS)
-            );
+            return scheduler.runTaskLaterAsynchronously(plugin, runnable, delayInTicks);
         }
     }
     
@@ -62,18 +57,16 @@ public interface BukkitTaskScheduler extends TaskScheduler<BukkitTask>
     {
         Plugin plugin = getPlugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
+        long periodInTicks = Ticks.from(period, TimeUnit.MILLISECONDS);
     
         if (concurrency == Concurrency.SYNC)
         {
-            return scheduler.runTaskTimer(
-                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS), Ticks.from(delay, TimeUnit.MILLISECONDS)
-            );
+            return scheduler.runTaskTimer(plugin, runnable, delayInTicks, periodInTicks);
         }
         else
         {
-            return scheduler.runTaskTimerAsynchronously(
-                plugin, runnable, Ticks.from(delay, TimeUnit.MILLISECONDS), Ticks.from(delay, TimeUnit.MILLISECONDS)
-            );
+            return scheduler.runTaskTimerAsynchronously(plugin, runnable, delayInTicks, periodInTicks);
         }
     }
 }

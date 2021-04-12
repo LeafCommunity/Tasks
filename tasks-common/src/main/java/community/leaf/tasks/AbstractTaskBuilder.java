@@ -77,6 +77,12 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
         return self();
     }
     
+    public B forever()
+    {
+        repetitions = Repeats.Constant.FOREVER;
+        return self();
+    }
+    
     public <R extends Runnable> R run(R runnable)
     {
         Objects.requireNonNull(runnable, "runnable");
