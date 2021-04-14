@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 @FunctionalInterface
-public interface PlayerSessionDelegate extends PluginProvider
+public interface PlayerSessionDelegate extends PluginSource
 {
     default PlayerSession start(Player player) { return PlayerSession.start(plugin(), player); }
     
