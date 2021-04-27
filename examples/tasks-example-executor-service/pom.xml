@@ -2,39 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>tasks-examples</artifactId>
         <groupId>community.leaf.tasks</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tasks-example-bukkit</artifactId>
+    <artifactId>tasks-example-executor-service</artifactId>
 
     <properties>
         <shade.relocation>community.leaf.examples.tasks.bukkit.shaded</shade.relocation>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <!-- Spigot API (via spigot-repo) -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${versions.minecraft.spigot}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Tasks Bukkit (via local project) -->
+        <!-- Tasks Executor Service (via local project) -->
         <dependency>
             <groupId>community.leaf.tasks</groupId>
-            <artifactId>tasks-bukkit</artifactId>
+            <artifactId>tasks-executor-service</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
@@ -59,6 +45,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>community.leaf.examples.tasks.executors.ExampleMain</mainClass>
+                        </transformer>
+                    </transformers>
                     <relocations>
                         <!-- Tasks -->
                         <relocation>

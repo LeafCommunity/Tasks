@@ -10,12 +10,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>tasks-examples</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>tasks-executor-service</artifactId>
 
-    <modules>
-        <module>tasks-example-bukkit</module>
-        <module>tasks-example-executor-service</module>
-    </modules>
+    <dependencies>
+        <!-- Tasks Common (via local project) -->
+        <dependency>
+            <groupId>community.leaf.tasks</groupId>
+            <artifactId>tasks-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 
 </project>

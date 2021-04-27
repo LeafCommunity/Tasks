@@ -7,7 +7,7 @@
  */
 package community.leaf.tasks;
 
-import java.util.function.Predicate;
+import java.util.function.LongPredicate;
 
 public enum Repeats
 {
@@ -15,9 +15,9 @@ public enum Repeats
     FINITE(reps -> reps >= 1),
     FOREVER(reps -> reps <= -1);
     
-    private final Predicate<Long> validity;
+    private final LongPredicate validity;
     
-    Repeats(Predicate<Long> validity) { this.validity = validity; }
+    Repeats(LongPredicate validity) { this.validity = validity; }
     
     public Expected expecting(long repetitions)
     {

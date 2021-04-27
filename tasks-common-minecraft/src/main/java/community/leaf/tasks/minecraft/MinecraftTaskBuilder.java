@@ -13,7 +13,7 @@ import community.leaf.tasks.TaskScheduler;
 
 import java.util.function.LongFunction;
 
-public class MinecraftTaskBuilder extends AbstractTaskBuilder<MinecraftTaskBuilder, PendingTicks<MinecraftTaskBuilder>>
+public final class MinecraftTaskBuilder extends AbstractTaskBuilder<MinecraftTaskBuilder, PendingTicks<MinecraftTaskBuilder>>
 {
     public MinecraftTaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
     {

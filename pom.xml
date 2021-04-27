@@ -40,8 +40,9 @@
 
     <modules>
         <module>tasks-common</module>
-        <module>tasks-bukkit</module>
         <module>tasks-common-minecraft</module>
+        <module>tasks-executor-service</module>
+        <module>tasks-bukkit</module>
     </modules>
 
     <properties>
@@ -157,13 +158,13 @@
                         </licenseSet>
                     </licenseSets>
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
         </plugins>
         <resources>

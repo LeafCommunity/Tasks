@@ -9,7 +9,7 @@ package community.leaf.tasks;
 
 import java.util.function.LongFunction;
 
-public class TaskBuilder extends AbstractTaskBuilder<TaskBuilder, PendingMilliseconds<TaskBuilder>>
+public final class TaskBuilder extends AbstractTaskBuilder<TaskBuilder, PendingMilliseconds<TaskBuilder>>
 {
     public TaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
     {

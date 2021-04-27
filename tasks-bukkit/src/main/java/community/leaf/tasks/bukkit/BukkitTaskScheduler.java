@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitTask>
 {
     @Override
-    default BukkitTaskContext createTaskContext(Repeats.Expected repetitions)
+    default BukkitTaskContext createTaskContext(Concurrency concurrency, Repeats.Expected repeats)
     {
-        return new BukkitTaskContext(repetitions);
+        return new BukkitTaskContext(repeats);
     }
     
     @Override
