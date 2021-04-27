@@ -11,7 +11,7 @@
 
     <name>Tasks</name>
     <inceptionYear>2021</inceptionYear>
-    <description>Task builders.</description>
+    <description>Build and schedule tasks.</description>
 
     <licenses>
         <license>
