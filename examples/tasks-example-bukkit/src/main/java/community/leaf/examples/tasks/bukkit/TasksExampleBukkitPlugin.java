@@ -1,6 +1,5 @@
 package community.leaf.examples.tasks.bukkit;
 
-import community.leaf.tasks.Tasks;
 import community.leaf.tasks.bukkit.BukkitTaskSource;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -18,8 +17,8 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
         sync().run(() ->
             getLogger().info(ChatColor.LIGHT_PURPLE + "Tasks Example Bukkit Plugin: success!")
         );
-    
-        Tasks.sync(this).delay(10).ticks().run(() -> getLogger().info("10 ticks later..."));
+        
+        sync().delay(10).ticks().run(() -> getLogger().info("10 ticks later..."));
         
         sync().delay(1).seconds().repeat(5).every(3).seconds()
             .runWithContext(task -> {
