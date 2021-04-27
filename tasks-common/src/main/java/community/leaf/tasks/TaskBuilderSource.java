@@ -5,14 +5,4 @@ public interface TaskBuilderSource<B extends AbstractTaskBuilder<B, ? extends Pe
     TaskScheduler<?> getTaskScheduler();
     
     TaskBuilderConstructor<B> getTaskBuilderConstructor();
-    
-    default B sync()
-    {
-        return getTaskBuilderConstructor().constructTaskBuilder(Concurrency.SYNC, getTaskScheduler());
-    }
-    
-    default B async()
-    {
-        return getTaskBuilderConstructor().constructTaskBuilder(Concurrency.ASYNC, getTaskScheduler());
-    }
 }

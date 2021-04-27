@@ -4,22 +4,19 @@ public class Tasks
 {
     private Tasks() { throw new UnsupportedOperationException(); }
     
-    public static
-        <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
         B builder(TaskBuilderConstructor<B> constructor, Concurrency concurrency, TaskScheduler<?> scheduler)
     {
-        return constructor.constructTaskBuilder(concurrency, scheduler);
+        return constructor.construct(concurrency, scheduler);
     }
     
-    public static
-        <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
         B sync(TaskBuilderConstructor<B> constructor, TaskScheduler<?> scheduler)
     {
         return builder(constructor, Concurrency.SYNC, scheduler);
     }
     
-    public static
-        <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
         B sync(TaskBuilderSource<B> source)
     {
         return sync(source.getTaskBuilderConstructor(), source.getTaskScheduler());
@@ -30,15 +27,13 @@ public class Tasks
         return sync(TaskBuilder::new, scheduler);
     }
     
-    public static
-        <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
         B async(TaskBuilderConstructor<B> constructor, TaskScheduler<?> scheduler)
     {
         return builder(constructor, Concurrency.ASYNC, scheduler);
     }
     
-    public static
-        <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+    public static <B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
         B async(TaskBuilderSource<B> source)
     {
         return async(source.getTaskBuilderConstructor(), source.getTaskScheduler());
