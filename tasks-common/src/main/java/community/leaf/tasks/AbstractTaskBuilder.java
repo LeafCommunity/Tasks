@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P extends PendingMilliseconds<B>> implements Schedulable
@@ -19,7 +19,7 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     private long period;
     
     private @NullOr List<Unless> cancellation = null;
-    private Repeats.Expected repetitions = Repeats.Constant.NEVER;
+    private Repeats.Expected repeats = Repeats.Constant.NEVER;
     
     public AbstractTaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
     {
@@ -27,16 +27,16 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
         this.scheduler = Objects.requireNonNull(scheduler, "scheduler");
     }
     
-    protected abstract P generatePendingMilliseconds(Function<Long, B> function, long units);
+    protected abstract P pending(LongFunction<B> function, long units);
     
     @SuppressWarnings("unchecked")
     protected final B self() { return (B) this; }
     
     @Override
-    public final Concurrency getConcurrency() { return concurrency; }
+    public final Concurrency concurrency() { return concurrency; }
     
     @Override
-    public long getDelay() { return delay; }
+    public long delay() { return delay; }
     
     public B delayByMilliseconds(long milliseconds)
     {
@@ -51,15 +51,15 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     
     public P delay(long pendingDuration)
     {
-        return generatePendingMilliseconds(this::delayByMilliseconds, pendingDuration);
+        return pending(this::delayByMilliseconds, pendingDuration);
     }
     
     @Override
-    public long getPeriod() { return period; }
+    public long period() { return period; }
     
     public B everyFewMilliseconds(long milliseconds)
     {
-        if (repetitions.until() == Repeats.NEVER) { repetitions = Repeats.Constant.FOREVER; }
+        if (repeats.until() == Repeats.NEVER) { repeats = Repeats.Constant.FOREVER; }
         period = milliseconds;
         return self();
     }
@@ -71,21 +71,21 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     
     public P every(long pendingDuration)
     {
-        return generatePendingMilliseconds(this::everyFewMilliseconds, pendingDuration);
+        return pending(this::everyFewMilliseconds, pendingDuration);
     }
     
     @Override
-    public Repeats.Expected getRepetitions() { return repetitions; }
+    public Repeats.Expected repeats() { return repeats; }
     
-    public B repeat(long iterations)
+    public B repeat(long repetitions)
     {
-        repetitions = Repeats.from(iterations);
+        repeats = Repeats.expect(repetitions);
         return self();
     }
     
     public B forever()
     {
-        repetitions = Repeats.Constant.FOREVER;
+        repeats = Repeats.Constant.FOREVER;
         return self();
     }
     
@@ -99,7 +99,7 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
     
     protected boolean isAutoCancellable()
     {
-        return (repetitions.until() == Repeats.FINITE) || (cancellation != null && !cancellation.isEmpty());
+        return (repeats.until() == Repeats.FINITE) || (cancellation != null && !cancellation.isEmpty());
     }
     
     protected List<Unless> copyCancellationCriteria()

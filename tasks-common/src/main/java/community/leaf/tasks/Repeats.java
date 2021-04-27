@@ -38,7 +38,7 @@ public enum Repeats
         public static final Expected FOREVER = Repeats.FOREVER.expecting(-1);
     }
     
-    public static Expected from(long repetitions)
+    public static Expected expect(long repetitions)
     {
         if (NEVER.validity.test(repetitions)) { return Constant.NEVER; }
         if (FOREVER.validity.test(repetitions)) { return Constant.FOREVER; }

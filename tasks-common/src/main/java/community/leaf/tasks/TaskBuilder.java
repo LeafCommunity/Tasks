@@ -1,6 +1,6 @@
 package community.leaf.tasks;
 
-import java.util.function.Function;
+import java.util.function.LongFunction;
 
 public class TaskBuilder extends AbstractTaskBuilder<TaskBuilder, PendingMilliseconds<TaskBuilder>>
 {
@@ -10,9 +10,7 @@ public class TaskBuilder extends AbstractTaskBuilder<TaskBuilder, PendingMillise
     }
     
     @Override
-    protected PendingMilliseconds<TaskBuilder> generatePendingMilliseconds(
-        Function<Long, TaskBuilder> function, long units
-    )
+    protected PendingMilliseconds<TaskBuilder> pending(LongFunction<TaskBuilder> function, long units)
     {
         return new PendingMilliseconds<>(function, units);
     }

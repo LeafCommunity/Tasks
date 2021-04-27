@@ -13,23 +13,23 @@ public interface TaskScheduler<T>
     
     default T schedule(Schedulable when, Runnable runnable)
     {
-        if (when.getRepetitions().until() != Repeats.NEVER)
+        if (when.repeats().until() != Repeats.NEVER)
         {
-            return runRepeatingTask(when.getConcurrency(), runnable, when.getDelay(), when.getPeriod());
+            return runRepeatingTask(when.concurrency(), runnable, when.delay(), when.period());
         }
         else if (when.isDelayed())
         {
-            return runFutureTask(when.getConcurrency(), runnable, when.getDelay());
+            return runFutureTask(when.concurrency(), runnable, when.delay());
         }
         else
         {
-            return runTask(when.getConcurrency(), runnable);
+            return runTask(when.concurrency(), runnable);
         }
     }
     
     default T schedule(Schedulable when, ContextualRunnable runnable)
     {
-        WrappedTaskContext<T> context = createTaskContext(when.getRepetitions());
+        WrappedTaskContext<T> context = createTaskContext(when.repeats());
         
         T task = schedule(when, () -> {
             runnable.run(context);

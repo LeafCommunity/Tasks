@@ -9,22 +9,22 @@ public abstract class WrappedTaskContext<T> implements TaskContext
     private long iterations = 0;
     private @NullOr T wrapped = null;
     
-    private final Repeats.Expected repetitions;
+    private final Repeats.Expected repeats;
     
-    public WrappedTaskContext(Repeats.Expected repetitions)
+    public WrappedTaskContext(Repeats.Expected repeats)
     {
-        this.repetitions = Objects.requireNonNull(repetitions, "repetitions");
+        this.repeats = Objects.requireNonNull(repeats, "repeats");
     }
     
     @Override
-    public final long getIterations() { return this.iterations; }
+    public final long iterations() { return this.iterations; }
     
     public final void iterate() { this.iterations += 1; }
     
     @Override
-    public final Repeats.Expected getExpectedRepetitions() { return repetitions; }
+    public final Repeats.Expected repeats() { return repeats; }
     
-    public final T getTask()
+    public final T task()
     {
         if (this.wrapped != null) { return this.wrapped; }
         throw new IllegalStateException("No task wrapped yet.");

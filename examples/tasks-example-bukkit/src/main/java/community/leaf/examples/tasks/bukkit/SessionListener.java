@@ -34,7 +34,7 @@ public class SessionListener implements Listener
                 Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
                 String random = String.valueOf(colors[ThreadLocalRandom.current().nextInt(colors.length)]);
                 
-                player.sendMessage(random + "Hello. " + ChatColor.ITALIC + "#" + (task.getIterations() + 1));
+                player.sendMessage(random + "Hello. " + ChatColor.ITALIC + "#" + (task.iterations() + 1));
             });
     }
     

@@ -23,7 +23,7 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
         sync().delay(1).seconds().repeat(5).every(3).seconds()
             .runWithContext(task -> {
                 if (task.isFirstIteration()) { getLogger().info(ChatColor.GREEN + "FIRST ITERATION!"); }
-                getLogger().info("Task iterations so far: " + ChatColor.GREEN + task.getIterations());
+                getLogger().info("Task iterations so far: " + ChatColor.GREEN + task.iterations());
                 if (task.isLastIteration()) { getLogger().info(ChatColor.GREEN + "LAST ITERATION."); }
             });
     }
@@ -36,7 +36,7 @@ public class TasksExampleBukkitPlugin extends JavaPlugin implements BukkitTaskSo
     {
         sync().repeat(5).every(20).ticks()
             .runWithContext(task -> {
-                sender.sendMessage("Test:" + ChatColor.LIGHT_PURPLE + " #" + (task.getIterations() + 1));
+                sender.sendMessage("Test:" + ChatColor.LIGHT_PURPLE + " #" + (task.iterations() + 1));
             });
         
         return true;

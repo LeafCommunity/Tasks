@@ -10,14 +10,14 @@ public class BukkitTaskContext extends WrappedTaskContext<BukkitTask>
     public BukkitTaskContext(Repeats.Expected repetitions) { super(repetitions); }
     
     @Override
-    public boolean isCancelled() { return getTask().isCancelled(); }
+    public boolean isCancelled() { return task().isCancelled(); }
     
     @Override
-    public void cancel() { getTask().cancel(); }
+    public void cancel() { task().cancel(); }
     
     @Override
-    public Concurrency getConcurrency()
+    public Concurrency concurrency()
     {
-        return (getTask().isSync()) ? Concurrency.SYNC : Concurrency.ASYNC;
+        return (task().isSync()) ? Concurrency.SYNC : Concurrency.ASYNC;
     }
 }

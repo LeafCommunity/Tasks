@@ -1,15 +1,15 @@
 package community.leaf.tasks;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 
 @SuppressWarnings("unused")
 public class PendingMilliseconds<B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
 {
-    protected final Function<Long, B> pendingFunction;
+    protected final LongFunction<B> pendingFunction;
     protected final long units;
     
-    public PendingMilliseconds(Function<Long, B> pendingFunction, long units)
+    public PendingMilliseconds(LongFunction<B> pendingFunction, long units)
     {
         this.pendingFunction = pendingFunction;
         this.units = units;

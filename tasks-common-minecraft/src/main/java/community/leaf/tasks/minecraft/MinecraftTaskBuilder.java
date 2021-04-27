@@ -4,7 +4,7 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.AbstractTaskBuilder;
 import community.leaf.tasks.TaskScheduler;
 
-import java.util.function.Function;
+import java.util.function.LongFunction;
 
 public class MinecraftTaskBuilder extends AbstractTaskBuilder<MinecraftTaskBuilder, PendingTicks<MinecraftTaskBuilder>>
 {
@@ -14,9 +14,7 @@ public class MinecraftTaskBuilder extends AbstractTaskBuilder<MinecraftTaskBuild
     }
     
     @Override
-    protected PendingTicks<MinecraftTaskBuilder> generatePendingMilliseconds(
-        Function<Long, MinecraftTaskBuilder> function, long units
-    )
+    protected PendingTicks<MinecraftTaskBuilder> pending(LongFunction<MinecraftTaskBuilder> function, long units)
     {
         return new PendingTicks<>(function, units);
     }

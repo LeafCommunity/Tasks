@@ -2,13 +2,13 @@ package community.leaf.tasks;
 
 public interface Schedulable
 {
-    Concurrency getConcurrency();
+    Concurrency concurrency();
     
-    long getDelay();
+    long delay();
     
-    default boolean isDelayed() { return getDelay() > 0; }
+    long period();
     
-    long getPeriod();
+    Repeats.Expected repeats();
     
-    Repeats.Expected getRepetitions();
+    default boolean isDelayed() { return delay() > 0; }
 }

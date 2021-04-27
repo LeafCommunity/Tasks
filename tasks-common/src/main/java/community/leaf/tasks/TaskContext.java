@@ -3,36 +3,36 @@ package community.leaf.tasks;
 @SuppressWarnings("unused")
 public interface TaskContext
 {
-    Concurrency getConcurrency();
+    Concurrency concurrency();
     
-    long getIterations();
+    long iterations();
     
-    Repeats.Expected getExpectedRepetitions();
+    Repeats.Expected repeats();
     
     boolean isCancelled();
     
     void cancel();
     
-    default boolean isRepeatingForever() { return getExpectedRepetitions().until() == Repeats.FOREVER; }
+    default boolean isRepeatingForever() { return repeats().until() == Repeats.FOREVER; }
     
-    default boolean isRepeatingFinitely() { return getExpectedRepetitions().until() == Repeats.FINITE; }
+    default boolean isRepeatingFinitely() { return repeats().until() == Repeats.FINITE; }
     
-    default boolean isRepeating() { return getExpectedRepetitions().until() != Repeats.NEVER; }
+    default boolean isRepeating() { return repeats().until() != Repeats.NEVER; }
     
     default boolean isDoneRepeating()
     {
-        Repeats.Expected expected = getExpectedRepetitions();
+        Repeats.Expected repeats = repeats();
         return (isCancelled())
-            || (expected.until() == Repeats.NEVER && getIterations() > expected.repetitions())
-            || (expected.until() == Repeats.FINITE && getIterations() >= expected.repetitions());
+            || (repeats.until() == Repeats.NEVER && iterations() > repeats.repetitions())
+            || (repeats.until() == Repeats.FINITE && iterations() >= repeats.repetitions());
     }
     
-    default boolean isFirstIteration() { return getIterations() == 0; }
+    default boolean isFirstIteration() { return iterations() == 0; }
     
     default boolean isLastIteration()
     {
-        Repeats.Expected expected = getExpectedRepetitions();
-        return (expected.until() == Repeats.NEVER)
-            || (expected.until() == Repeats.FINITE && getIterations() == expected.repetitions() - 1);
+        Repeats.Expected repeats = repeats();
+        return (repeats.until() == Repeats.NEVER)
+            || (repeats.until() == Repeats.FINITE && iterations() == repeats.repetitions() - 1);
     }
 }
