@@ -9,6 +9,35 @@
     <packaging>pom</packaging>
     <version>${revision}</version> <!-- Change the version number in .mvn/maven.config -->
 
+    <name>Tasks</name>
+    <inceptionYear>2021</inceptionYear>
+    <description>Task builders.</description>
+
+    <licenses>
+        <license>
+            <name>Mozilla Public License Version 2.0</name>
+            <url>http://mozilla.org/MPL/2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>RezzedUp</name>
+            <url>https://github.com/RezzedUp</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/LeafCommunity/Tasks.git</connection>
+        <developerConnection>scm:git:ssh://github.com:LeafCommunity/Tasks.git</developerConnection>
+        <url>http://github.com/LeafCommunity/Tasks</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/LeafCommunity/Tasks/issues</url>
+    </issueManagement>
+
     <modules>
         <module>tasks-common</module>
         <module>tasks-bukkit</module>
@@ -20,37 +49,14 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- License headers -->
+        <license.header.year>${project.inceptionYear}</license.header.year>
+        <license.header.owner>RezzedUp</license.header.owner>
+        <license.header.url>https://github.com/LeafCommunity/Tasks</license.header.url>
+
         <!-- Dependency versions -->
         <versions.minecraft.spigot>1.16.5-R0.1-SNAPSHOT</versions.minecraft.spigot>
     </properties>
-
-    <profiles>
-        <!--
-        Development: enabled by default, unless tests are skipped.
-        Includes entire project (including 'example' modules) and skips javadocs.
-
-        If it is disabled by skipping tests with -DskipTests, then the
-        example plugins will not be built and javadocs will be generated.
-        -->
-        <profile>
-            <id>development</id>
-            <activation>
-                <!--
-                Since jitpack will skip tests (-DskipTests), this profile
-                is only active when that property is not set.
-                -->
-                <property>
-                    <name>!skipTests</name>
-                </property>
-            </activation>
-            <properties>
-                <maven.javadoc.skip>true</maven.javadoc.skip>
-            </properties>
-            <modules>
-                <module>examples</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <dependencies>
         <!-- Nullness Annotations: @NullOr (via maven-central) -->
@@ -124,6 +130,41 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Add license header -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>4.1</version>
+                <configuration>
+                    <properties>
+                        <year>${license.header.year}</year>
+                        <owner>${license.header.owner}</owner>
+                        <email>${license.header.url}</email>
+                    </properties>
+                    <licenseSets>
+                        <licenseSet>
+                            <header>com/mycila/maven/plugin/license/templates/MPL-2.txt</header>
+                            <excludes>
+                                <exclude>*.md</exclude>
+                                <exclude>*.txt</exclude>
+                                <exclude>*.xml</exclude>
+                                <exclude>*.yml</exclude>
+                                <exclude>.run/**</exclude>
+                                <exclude>examples/**</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <!-- Filter resource files -->
@@ -133,5 +174,33 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <!--
+        Development: enabled by default, unless tests are skipped.
+        Includes entire project (including 'example' modules) and skips javadocs.
+
+        If it is disabled by skipping tests with -DskipTests, then the
+        example plugins will not be built and javadocs will be generated.
+        -->
+        <profile>
+            <id>development</id>
+            <activation>
+                <!--
+                Since jitpack will skip tests (-DskipTests), this profile
+                is only active when that property is not set.
+                -->
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <properties>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
+            </properties>
+            <modules>
+                <module>examples</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
