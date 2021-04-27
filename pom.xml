@@ -39,10 +39,10 @@
     </issueManagement>
 
     <modules>
-        <module>tasks-common</module>
-        <module>tasks-common-minecraft</module>
-        <module>tasks-executor-service</module>
+        <module>tasks-api</module>
         <module>tasks-bukkit</module>
+        <module>tasks-executor-service</module>
+        <module>tasks-minecraft</module>
     </modules>
 
     <properties>

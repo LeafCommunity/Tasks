@@ -9,13 +9,13 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>tasks-common-minecraft</artifactId>
+    <artifactId>tasks-minecraft</artifactId>
 
     <dependencies>
         <!-- Tasks Common (via local project) -->
         <dependency>
             <groupId>community.leaf.tasks</groupId>
-            <artifactId>tasks-common</artifactId>
+            <artifactId>tasks-api</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

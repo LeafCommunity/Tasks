@@ -13,7 +13,7 @@
     <artifactId>tasks-example-executor-service</artifactId>
 
     <properties>
-        <shade.relocation>community.leaf.examples.tasks.bukkit.shaded</shade.relocation>
+        <shade.relocation>community.leaf.examples.tasks.executors.shaded</shade.relocation>
     </properties>
 
     <dependencies>
