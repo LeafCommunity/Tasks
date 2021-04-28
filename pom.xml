@@ -114,30 +114,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Generate javadocs -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <doclint>none</doclint>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate-jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- Add license header -->
             <plugin>
                 <groupId>com.mycila</groupId>
@@ -165,13 +141,6 @@
                         </licenseSet>
                     </licenseSets>
                 </configuration>
-                <!--<executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>-->
             </plugin>
         </plugins>
         <resources>
@@ -184,30 +153,75 @@
     </build>
 
     <profiles>
-        <!--
-        Development: enabled by default, unless tests are skipped.
-        Includes entire project (including 'example' modules) and skips javadocs.
-
-        If it is disabled by skipping tests with -DskipTests, then the
-        example plugins will not be built and javadocs will be generated.
-        -->
+        <!-- Development (activated by default and disabled if JitPack profile is enabled) -->
+        <!-- Example modules only exist in this profile -->
         <profile>
             <id>development</id>
             <activation>
-                <!--
-                Since jitpack will skip tests (-DskipTests), this profile
-                is only active when that property is not set.
-                -->
+                <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>!skipTests</name>
+                    <name>!env.JITPACK</name>
                 </property>
             </activation>
-            <properties>
-                <maven.javadoc.skip>true</maven.javadoc.skip>
-            </properties>
             <modules>
                 <module>examples</module>
             </modules>
+        </profile>
+        <!-- JitPack (activated with `JITPACK=true` environment variable) -->
+        <profile>
+            <id>jitpack</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>env.JITPACK</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Generate javadocs -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <configuration>
+                            <doclint>none</doclint>
+                            <links>
+                                <link>https://javadoc.io/doc/pl.tlinkowski.annotation/pl.tlinkowski.annotation.basic/0.2.0/</link>
+                                <link>https://hub.spigotmc.org/javadocs/spigot/</link>
+                            </links>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>aggregate</id>
+                                <goals>
+                                    <goal>aggregate-jar</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Attach sources -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
