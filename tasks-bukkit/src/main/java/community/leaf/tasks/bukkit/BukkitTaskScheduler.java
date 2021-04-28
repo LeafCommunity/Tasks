@@ -27,7 +27,7 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
     }
     
     @Override
-    default BukkitTask runNow(Concurrency concurrency, Runnable runnable)
+    default BukkitTask now(Concurrency concurrency, Runnable runnable)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
@@ -43,7 +43,7 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
     }
     
     @Override
-    default BukkitTask runFuture(Concurrency concurrency, Runnable runnable, long delay)
+    default BukkitTask future(Concurrency concurrency, Runnable runnable, long delay)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
@@ -61,7 +61,7 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
     }
     
     @Override
-    default BukkitTask runRepeating(Concurrency concurrency, Runnable runnable, long delay, long period)
+    default BukkitTask repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();

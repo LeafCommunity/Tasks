@@ -25,19 +25,19 @@ public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskSchedu
     }
     
     @Override
-    default Future<?> runNow(Concurrency concurrency, Runnable runnable)
+    default Future<?> now(Concurrency concurrency, Runnable runnable)
     {
         return executor(concurrency).submit(runnable);
     }
     
     @Override
-    default Future<?> runFuture(Concurrency concurrency, Runnable runnable, long delay)
+    default Future<?> future(Concurrency concurrency, Runnable runnable, long delay)
     {
         return executor(concurrency).schedule(runnable, delay, TimeUnit.MILLISECONDS);
     }
     
     @Override
-    default Future<?> runRepeating(Concurrency concurrency, Runnable runnable, long delay, long period)
+    default Future<?> repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
         return executor(concurrency).scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
     }

@@ -11,7 +11,7 @@ import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.Objects;
 
-public class ScheduleImpl implements Schedule
+class ScheduleImpl implements Schedule
 {
     private final Concurrency concurrency;
     private final long delay;
@@ -54,12 +54,12 @@ public class ScheduleImpl implements Schedule
     {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
-        ScheduleImpl schedule = (ScheduleImpl) o;
         
-        return delay == schedule.delay
-            && period == schedule.period
-            && concurrency == schedule.concurrency
-            && repeats.equals(schedule.repeats);
+        ScheduleImpl that = (ScheduleImpl) o;
+        return delay == that.delay
+            && period == that.period
+            && concurrency == that.concurrency
+            && repeats.equals(that.repeats);
     }
     
     @Override

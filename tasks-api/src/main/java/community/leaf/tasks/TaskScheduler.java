@@ -12,11 +12,11 @@ public interface TaskScheduler<T>
 {
     TaskContext<T> context(Schedule schedule);
     
-    T runNow(Concurrency concurrency, Runnable runnable);
+    T now(Concurrency concurrency, Runnable runnable);
     
-    T runFuture(Concurrency concurrency, Runnable runnable, long delay);
+    T future(Concurrency concurrency, Runnable runnable, long delay);
     
-    T runRepeating(Concurrency concurrency, Runnable runnable, long delay, long period);
+    T repeat(Concurrency concurrency, Runnable runnable, long delay, long period);
     
     default TaskContext<T> schedule(Schedule schedule, ContextualRunnable<T> runnable)
     {
@@ -29,15 +29,15 @@ public interface TaskScheduler<T>
         
         if (schedule.repeats().until() != Repeats.NEVER)
         {
-            context.task(runRepeating(schedule.concurrency(), task, schedule.delay(), schedule.period()));
+            context.task(repeat(schedule.concurrency(), task, schedule.delay(), schedule.period()));
         }
         else if (schedule.isDelayed())
         {
-            context.task(runFuture(schedule.concurrency(), task, schedule.delay()));
+            context.task(future(schedule.concurrency(), task, schedule.delay()));
         }
         else
         {
-            context.task(runNow(schedule.concurrency(), task));
+            context.task(now(schedule.concurrency(), task));
         }
         
         return context;
