@@ -32,5 +32,5 @@ public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B, ? extends Pe
     }
     
     interface Concurrent<T, B extends ScheduledTaskBuilder<T, B, ? extends Pending<B>>>
-        extends Sync<T, B>, Async<T, B> {};
+        extends Async<T, B>, Sync<T, B> {};
 }
