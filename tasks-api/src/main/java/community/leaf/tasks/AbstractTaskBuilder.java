@@ -13,12 +13,12 @@ import java.util.Objects;
 import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B, P>, P extends PendingMilliseconds<B>>
+public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B, P>, P extends Pending<B>>
     implements ScheduledTaskBuilder<T, B, P>
 {
     protected final TaskScheduler<T> scheduler;
     protected final Concurrency concurrency;
-    protected final PendingMilliseconds.Constructor<B, P> pending;
+    protected final Pending.Constructor<B, P> pending;
     
     private long delay;
     private long period;
@@ -26,7 +26,7 @@ public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B,
     private Repeats.Expected repeats = Repeats.Constantly.NEVER;
     private Unless.@NullOr Builder cancellation = null;
     
-    protected AbstractTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency, PendingMilliseconds.Constructor<B, P> pending)
+    protected AbstractTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency, Pending.Constructor<B, P> pending)
     {
         this.scheduler = Objects.requireNonNull(scheduler, "scheduler");
         this.concurrency = Objects.requireNonNull(concurrency, "concurrency");
@@ -88,7 +88,7 @@ public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B,
     }
     
     @Override
-    public final TaskContext<T> run(ContextualRunnable runnable)
+    public final TaskContext<T> run(ContextualRunnable<T> runnable)
     {
         Objects.requireNonNull(runnable, "runnable");
         

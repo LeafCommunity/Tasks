@@ -7,27 +7,14 @@
  */
 package community.leaf.tasks.minecraft;
 
-import java.util.concurrent.TimeUnit;
+import community.leaf.tasks.Pending;
+import community.leaf.tasks.Schedule;
 
-public class Ticks
+import java.util.concurrent.TimeUnit;
+import java.util.function.LongFunction;
+
+public interface Ticks<B extends Schedule.Builder<B, ? extends Pending<B>>> extends Pending<B>
 {
-    private Ticks() { throw new UnsupportedOperationException(); }
-    
-    /**
-     * One second's worth of Minecraft ticks.
-     */
-    public static final long SECOND = from(1, TimeUnit.SECONDS);
-    
-    /**
-     * One minute's worth of Minecraft ticks.
-     */
-    public static final long MINUTE = from(1, TimeUnit.MINUTES);
-    
-    /**
-     * One hour's worth of Minecraft ticks.
-     */
-    public static final long HOUR = from(1, TimeUnit.HOURS);
-    
     /**
      * Convert from a duration of time to Minecraft ticks.
      *
@@ -35,7 +22,7 @@ public class Ticks
      * @param sourceUnit        unit of time
      * @return  ticks equivalent of the duration
      */
-    public static long from(long sourceDuration, TimeUnit sourceUnit)
+    static long from(long sourceDuration, TimeUnit sourceUnit)
     {
         // 1 tick = 50 milliseconds
         return TimeUnit.MILLISECONDS.convert(sourceDuration, sourceUnit) / 50;
@@ -48,7 +35,7 @@ public class Ticks
      * @param sourceUnit        unit of time
      * @return  ticks equivalent of the duration as an integer
      */
-    public static int fromInteger(int sourceDuration, TimeUnit sourceUnit)
+    static int fromInteger(int sourceDuration, TimeUnit sourceUnit)
     {
         return (int) from(sourceDuration, sourceUnit);
     }
@@ -60,7 +47,7 @@ public class Ticks
      * @param unit  unit of time
      * @return      units of time equivalent to ticks
      */
-    public static long into(long ticks, TimeUnit unit)
+    static long into(long ticks, TimeUnit unit)
     {
         return unit.convert(ticks * 50, TimeUnit.MILLISECONDS);
     }
@@ -72,8 +59,24 @@ public class Ticks
      * @param unit  unit of time
      * @return      units of time equivalent to ticks as an integer
      */
-    public static int intoInteger(int ticks, TimeUnit unit)
+    static int intoInteger(int ticks, TimeUnit unit)
     {
         return Long.valueOf(into(ticks, unit)).intValue();
+    }
+    
+    B ticks();
+    
+    class PendingTicks<B extends Schedule.Builder<B, ? extends Pending<B>>> extends Milliseconds<B> implements Ticks<B>
+    {
+        public PendingTicks(LongFunction<B> pendingFunction, long units)
+        {
+            super(pendingFunction, units);
+        }
+        
+        @Override
+        public B ticks()
+        {
+            return applyMilliseconds(into(super.units, TimeUnit.MILLISECONDS));
+        }
     }
 }

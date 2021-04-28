@@ -7,13 +7,13 @@
  */
 package community.leaf.tasks;
 
-public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B, ? extends PendingMilliseconds<B>>>
+public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B, ? extends Pending<B>>>
 {
     TaskScheduler<T> getTaskScheduler();
     
     ScheduledTaskBuilder.Constructor<T, B> getTaskBuilderConstructor();
     
-    interface Async<T, B extends ScheduledTaskBuilder<T, B, ? extends PendingMilliseconds<B>>>
+    interface Async<T, B extends ScheduledTaskBuilder<T, B, ? extends Pending<B>>>
         extends TaskSource<T, B>
     {
         default B async()
@@ -22,7 +22,7 @@ public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B, ? extends Pe
         }
     }
     
-    interface Sync<T, B extends ScheduledTaskBuilder<T, B, ? extends PendingMilliseconds<B>>>
+    interface Sync<T, B extends ScheduledTaskBuilder<T, B, ? extends Pending<B>>>
         extends TaskSource<T, B>
     {
         default B sync()
@@ -31,6 +31,6 @@ public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B, ? extends Pe
         }
     }
     
-    interface Concurrent<T, B extends ScheduledTaskBuilder<T, B, ? extends PendingMilliseconds<B>>>
+    interface Concurrent<T, B extends ScheduledTaskBuilder<T, B, ? extends Pending<B>>>
         extends Sync<T, B>, Async<T, B> {};
 }

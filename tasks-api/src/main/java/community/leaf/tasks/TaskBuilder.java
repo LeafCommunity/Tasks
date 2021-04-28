@@ -7,10 +7,10 @@
  */
 package community.leaf.tasks;
 
-public final class TaskBuilder<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, PendingMilliseconds<TaskBuilder<T>>>
+public final class TaskBuilder<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, Pending<TaskBuilder<T>>>
 {
     public TaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(scheduler, concurrency, PendingMilliseconds::new);
+        super(scheduler, concurrency, Pending.Milliseconds::new);
     }
 }

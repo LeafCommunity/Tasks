@@ -38,7 +38,7 @@ public interface Schedule
         Schedule schedule();
     }
     
-    interface Builder<B extends Builder<B, P>, P extends PendingMilliseconds<B>> extends Source
+    interface Builder<B extends Builder<B, P>, P extends Pending<B>> extends Source
     {
         P pending(LongFunction<B> function, long units);
         

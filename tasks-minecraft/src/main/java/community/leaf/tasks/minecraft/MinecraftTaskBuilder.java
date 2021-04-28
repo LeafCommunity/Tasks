@@ -11,10 +11,10 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.AbstractTaskBuilder;
 import community.leaf.tasks.TaskScheduler;
 
-public final class MinecraftTaskBuilder<T> extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, PendingTicks<MinecraftTaskBuilder<T>>>
+public final class MinecraftTaskBuilder<T> extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
 {
     public MinecraftTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(scheduler, concurrency, PendingTicks::new);
+        super(scheduler, concurrency, Ticks.PendingTicks::new);
     }
 }
