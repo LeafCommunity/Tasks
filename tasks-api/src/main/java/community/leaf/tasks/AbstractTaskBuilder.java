@@ -10,7 +10,6 @@ package community.leaf.tasks;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -109,10 +108,9 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
         return (repeats.until() == Repeats.FINITE) || (cancellation != null && !cancellation.isEmpty());
     }
     
-    protected List<Unless> copyCancellationCriteria()
+    protected Unless cancellationCriteria()
     {
-        if (cancellation == null || cancellation.isEmpty()) { return Collections.emptyList(); }
-        return new ArrayList<>(cancellation);
+        return (cancellation == null || cancellation.isEmpty()) ? Unless::never : Unless.any(List.copyOf(cancellation));
     }
     
     public <R extends Runnable> R run(R runnable)
@@ -121,10 +119,10 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
         
         if (isAutoCancellable())
         {
-            List<Unless> runs = copyCancellationCriteria();
+            Unless cancel = cancellationCriteria();
             
             scheduler.schedule(this, task -> {
-                if (task.isDoneRepeating() || runs.stream().anyMatch(Unless::criteria)) { task.cancel(); }
+                if (task.isDoneRepeating() || cancel.criteria()) { task.cancel(); }
                 else { runnable.run(); }
             });
         }
@@ -141,10 +139,10 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P
         
         if (isAutoCancellable())
         {
-            List<Unless> runs = copyCancellationCriteria();
+            Unless cancel = cancellationCriteria();
             
             scheduler.schedule(this, task -> {
-                if (task.isDoneRepeating() || runs.stream().anyMatch(Unless::criteria)) { task.cancel(); }
+                if (task.isDoneRepeating() || cancel.criteria()) { task.cancel(); }
                 else { runnable.run(task); }
             });
         }

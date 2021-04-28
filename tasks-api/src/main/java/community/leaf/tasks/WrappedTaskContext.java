@@ -10,11 +10,13 @@ package community.leaf.tasks;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class WrappedTaskContext<T> implements TaskContext
 {
-    private long iterations = 0;
-    private @NullOr T wrapped = null;
+    private final AtomicLong iterations = new AtomicLong();
+    private final AtomicReference<@NullOr T> wrapped = new AtomicReference<>();
     
     private final Repeats.Expected repeats;
     
@@ -24,22 +26,27 @@ public abstract class WrappedTaskContext<T> implements TaskContext
     }
     
     @Override
-    public final long iterations() { return this.iterations; }
+    public final long iterations() { return iterations.get(); }
     
-    public final void iterate() { this.iterations += 1; }
+    public final void iterate() { iterations.incrementAndGet(); }
     
     @Override
     public final Repeats.Expected repeats() { return repeats; }
     
     public final T task()
     {
-        if (this.wrapped != null) { return this.wrapped; }
-        throw new IllegalStateException("No task wrapped yet.");
+        @NullOr T task = wrapped.get();
+        if (task != null) { return task; }
+        throw new IllegalStateException("No task wrapped yet");
     }
     
     public final T wrap(T unwrapped)
     {
-        if (this.wrapped == null) { return this.wrapped = Objects.requireNonNull(unwrapped, "unwrapped"); }
-        throw new IllegalStateException("Already contains a wrapped task.");
+        // If compareAndExchange() is successful, it will return null since it
+        // always returns the current value (which should not by initialized yet).
+        // Otherwise, throw an exception for attempting to re-wrap with something else.
+        
+        if (wrapped.compareAndExchange(null, unwrapped) == null) { return unwrapped; }
+        throw new IllegalStateException("Already contains a wrapped task");
     }
 }

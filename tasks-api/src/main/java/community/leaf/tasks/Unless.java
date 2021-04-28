@@ -7,8 +7,19 @@
  */
 package community.leaf.tasks;
 
+import java.util.List;
+
 @FunctionalInterface
 public interface Unless
 {
     boolean criteria();
+    
+    static boolean always() { return true; }
+    
+    static boolean never() { return false; }
+    
+    static Unless any(List<Unless> caveats)
+    {
+        return () -> caveats.stream().anyMatch(Unless::criteria);
+    }
 }
