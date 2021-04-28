@@ -35,17 +35,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <!-- "Lower" java version for docs (so Spigot javadoc links work) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
