@@ -29,7 +29,7 @@ public class SessionListener implements Listener
         plugin.sync()
             .every(15).seconds().forever()
             .unless(PlayerSession.expired(plugin, player))
-            .runWithContext(task ->
+            .run(task ->
             {
                 Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
                 String random = String.valueOf(colors[ThreadLocalRandom.current().nextInt(colors.length)]);

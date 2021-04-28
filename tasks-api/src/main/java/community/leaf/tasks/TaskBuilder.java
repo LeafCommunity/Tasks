@@ -7,18 +7,10 @@
  */
 package community.leaf.tasks;
 
-import java.util.function.LongFunction;
-
-public final class TaskBuilder extends AbstractTaskBuilder<TaskBuilder, PendingMilliseconds<TaskBuilder>>
+public final class TaskBuilder<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, PendingMilliseconds<TaskBuilder<T>>>
 {
-    public TaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
+    public TaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(concurrency, scheduler);
-    }
-    
-    @Override
-    protected PendingMilliseconds<TaskBuilder> pending(LongFunction<TaskBuilder> function, long units)
-    {
-        return new PendingMilliseconds<>(function, units);
+        super(scheduler, concurrency, PendingMilliseconds::new);
     }
 }

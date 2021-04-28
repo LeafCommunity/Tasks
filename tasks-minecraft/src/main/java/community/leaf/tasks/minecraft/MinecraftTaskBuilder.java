@@ -11,18 +11,10 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.AbstractTaskBuilder;
 import community.leaf.tasks.TaskScheduler;
 
-import java.util.function.LongFunction;
-
-public final class MinecraftTaskBuilder extends AbstractTaskBuilder<MinecraftTaskBuilder, PendingTicks<MinecraftTaskBuilder>>
+public final class MinecraftTaskBuilder<T> extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, PendingTicks<MinecraftTaskBuilder<T>>>
 {
-    public MinecraftTaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
+    public MinecraftTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(concurrency, scheduler);
-    }
-    
-    @Override
-    protected PendingTicks<MinecraftTaskBuilder> pending(LongFunction<MinecraftTaskBuilder> function, long units)
-    {
-        return new PendingTicks<>(function, units);
+        super(scheduler, concurrency, PendingTicks::new);
     }
 }

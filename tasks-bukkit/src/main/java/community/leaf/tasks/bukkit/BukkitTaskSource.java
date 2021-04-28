@@ -7,12 +7,16 @@
  */
 package community.leaf.tasks.bukkit;
 
-import community.leaf.tasks.ConcurrentTaskSource;
-import community.leaf.tasks.TaskBuilderConstructor;
+import community.leaf.tasks.ScheduledTaskBuilder;
+import community.leaf.tasks.TaskSource;
 import community.leaf.tasks.minecraft.MinecraftTaskBuilder;
+import org.bukkit.scheduler.BukkitTask;
 
 @FunctionalInterface
-public interface BukkitTaskSource extends ConcurrentTaskSource<MinecraftTaskBuilder>, PlayerSessionSource, PluginSource
+public interface BukkitTaskSource extends
+    TaskSource.Concurrent<BukkitTask, MinecraftTaskBuilder<BukkitTask>>,
+    PlayerSessionSource,
+    PluginSource
 {
     @Override
     default BukkitTaskScheduler getTaskScheduler()
@@ -21,7 +25,8 @@ public interface BukkitTaskSource extends ConcurrentTaskSource<MinecraftTaskBuil
     }
     
     @Override
-    default TaskBuilderConstructor<MinecraftTaskBuilder> getTaskBuilderConstructor()
+    default ScheduledTaskBuilder.Constructor<BukkitTask, MinecraftTaskBuilder<BukkitTask>>
+        getTaskBuilderConstructor()
     {
         return MinecraftTaskBuilder::new;
     }

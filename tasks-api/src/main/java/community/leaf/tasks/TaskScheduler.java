@@ -10,39 +10,36 @@ package community.leaf.tasks;
 @SuppressWarnings("UnusedReturnValue")
 public interface TaskScheduler<T>
 {
-    WrappedTaskContext<T> createTaskContext(Concurrency concurrency, Repeats.Expected repeats);
+    TaskContext<T> context(Schedule schedule);
     
-    T runTask(Concurrency concurrency, Runnable runnable);
+    T runNow(Concurrency concurrency, Runnable runnable);
     
-    T runFutureTask(Concurrency concurrency, Runnable runnable, long delay);
+    T runFuture(Concurrency concurrency, Runnable runnable, long delay);
     
-    T runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period);
+    T runRepeating(Concurrency concurrency, Runnable runnable, long delay, long period);
     
-    default T schedule(Schedulable when, Runnable runnable)
+    default TaskContext<T> schedule(Schedule schedule, ContextualRunnable<T> runnable)
     {
-        if (when.repeats().until() != Repeats.NEVER)
+        TaskContext<T> context = context(schedule);
+        
+        Runnable task = () -> {
+            runnable.run(context);
+            context.iterate();
+        };
+        
+        if (schedule.repeats().until() != Repeats.NEVER)
         {
-            return runRepeatingTask(when.concurrency(), runnable, when.delay(), when.period());
+            context.task(runRepeating(schedule.concurrency(), task, schedule.delay(), schedule.period()));
         }
-        else if (when.isDelayed())
+        else if (schedule.isDelayed())
         {
-            return runFutureTask(when.concurrency(), runnable, when.delay());
+            context.task(runFuture(schedule.concurrency(), task, schedule.delay()));
         }
         else
         {
-            return runTask(when.concurrency(), runnable);
+            context.task(runNow(schedule.concurrency(), task));
         }
-    }
-    
-    default T schedule(Schedulable when, ContextualRunnable runnable)
-    {
-        WrappedTaskContext<T> context = createTaskContext(when.concurrency(), when.repeats());
         
-        T task = schedule(when, () -> {
-            runnable.run(context);
-            context.iterate();
-        });
-        
-        return context.wrap(task);
+        return context;
     }
 }

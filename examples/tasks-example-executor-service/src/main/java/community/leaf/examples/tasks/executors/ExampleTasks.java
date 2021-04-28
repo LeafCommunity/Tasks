@@ -1,12 +1,12 @@
 package community.leaf.examples.tasks.executors;
 
 import community.leaf.tasks.Concurrency;
-import community.leaf.tasks.executors.AsyncExecutorTaskSource;
+import community.leaf.tasks.executors.ExecutorTaskSource;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class ExampleTasks implements AsyncExecutorTaskSource
+public class ExampleTasks implements ExecutorTaskSource.Async
 {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
 @SuppressWarnings("unused")
-public class PendingMilliseconds<B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
+public class PendingMilliseconds<B extends Schedule.Builder<B, ? extends PendingMilliseconds<B>>>
 {
     protected final LongFunction<B> pendingFunction;
     protected final long units;
@@ -41,4 +41,9 @@ public class PendingMilliseconds<B extends AbstractTaskBuilder<B, ? extends Pend
     public B hours() { return applyUnit(TimeUnit.HOURS); }
     
     public B days() { return applyUnit(TimeUnit.DAYS); }
+    
+    public interface Constructor<B extends Schedule.Builder<B, P>, P extends PendingMilliseconds<B>>
+    {
+        P construct(LongFunction<B> function, long units);
+    }
 }

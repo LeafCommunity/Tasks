@@ -12,7 +12,7 @@ public class ExampleMain
         
         tasks.async().delay(2).seconds().run(() -> System.out.println("Wow! (2 seconds later)"));
         
-        tasks.async().every(500).milliseconds().forever().runWithContext(task ->
+        tasks.async().every(500).milliseconds().forever().run(task ->
             System.out.println("Twice a second #" + task.iterations())
         );
         
