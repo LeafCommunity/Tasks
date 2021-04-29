@@ -8,6 +8,7 @@
 package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Unless;
+import community.leaf.tasks.minecraft.PlayerSession;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -18,9 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PlayerSession
+final class BukkitPlayerSession implements PlayerSession
 {
-    public static final String KEY = PlayerSession.class.getName();
+    static final String KEY = BukkitPlayerSession.class.getName();
     
     private static void validate(Plugin plugin, Player player)
     {
@@ -28,16 +29,16 @@ public class PlayerSession
         Objects.requireNonNull(player, "player");
     }
     
-    public static PlayerSession start(Plugin plugin, Player player)
+    static BukkitPlayerSession start(Plugin plugin, Player player)
     {
         validate(plugin, player);
         
-        PlayerSession session = new PlayerSession(plugin, player);
+        BukkitPlayerSession session = new BukkitPlayerSession(plugin, player);
         player.setMetadata(KEY, new FixedMetadataValue(plugin, session));
         return session;
     }
     
-    public static Optional<PlayerSession> get(Plugin plugin, Player player)
+    static Optional<BukkitPlayerSession> get(Plugin plugin, Player player)
     {
         validate(plugin, player);
         
@@ -46,30 +47,30 @@ public class PlayerSession
             if (!plugin.equals(meta.getOwningPlugin())) { continue; }
             
             @NullOr Object value = meta.value();
-            if (!(value instanceof PlayerSession)) { continue; }
+            if (!(value instanceof BukkitPlayerSession)) { continue; }
             
-            return Optional.of((PlayerSession) value);
+            return Optional.of((BukkitPlayerSession) value);
         }
         
         return Optional.empty();
     }
     
-    public static PlayerSession getOrStart(Plugin plugin, Player player)
+    static BukkitPlayerSession getOrStart(Plugin plugin, Player player)
     {
         // validated in get() and start()
         return get(plugin, player).orElseGet(() -> start(plugin, player));
     }
     
-    public static void end(Plugin plugin, Player player)
+    static void end(Plugin plugin, Player player)
     {
         validate(plugin, player);
         player.removeMetadata(KEY, plugin);
     }
     
-    public static Unless expired(Plugin plugin, Player player)
+    static Unless expired(Plugin plugin, Player player)
     {
         // validated in getOrStart()
-        PlayerSession session = getOrStart(plugin, player);
+        BukkitPlayerSession session = getOrStart(plugin, player);
         return session::isExpired;
     }
     
@@ -86,37 +87,37 @@ public class PlayerSession
     private final WeakReference<Plugin> pluginReference;
     private final WeakReference<Player> playerReference;
     
-    private PlayerSession(Plugin plugin, Player player)
+    private BukkitPlayerSession(Plugin plugin, Player player)
     {
         this.pluginReference = new WeakReference<>(plugin);
         this.playerReference = new WeakReference<>(player);
     }
     
-    public @NullOr Plugin pluginOrNull() { return pluginReference.get(); }
+    @NullOr Plugin plugin() { return pluginReference.get(); }
     
-    public @NullOr Player playerOrNull() { return playerReference.get(); }
+    @NullOr Player player() { return playerReference.get(); }
     
+    @Override
     public void end()
     {
-        @NullOr Plugin plugin = pluginOrNull();
-        @NullOr Player player = playerOrNull();
+        @NullOr Plugin plugin = plugin();
+        @NullOr Player player = player();
         
         if (player == null || !isPluginValid(plugin)) { return; }
-        if (PlayerSession.get(plugin, player).filter(this::equals).isEmpty()) { return; }
+        if (BukkitPlayerSession.get(plugin, player).filter(this::equals).isEmpty()) { return; }
         
         player.removeMetadata(KEY, plugin);
     }
     
+    @Override
     public boolean isActive()
     {
-        @NullOr Plugin plugin = pluginOrNull();
-        @NullOr Player player = playerOrNull();
+        @NullOr Plugin plugin = plugin();
+        @NullOr Player player = player();
         
         return isPlayerOnline(player) && isPluginValid(plugin) &&
-            PlayerSession.get(plugin, player).filter(this::equals).isPresent();
+            BukkitPlayerSession.get(plugin, player).filter(this::equals).isPresent();
     }
-    
-    public boolean isExpired() { return !isActive(); }
     
     @Override
     public String toString()

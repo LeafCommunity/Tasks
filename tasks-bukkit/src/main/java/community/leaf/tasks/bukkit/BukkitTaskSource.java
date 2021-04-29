@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 @FunctionalInterface
 public interface BukkitTaskSource extends
-    PlayerSessionSource,
+    BukkitPlayerSessionManager.Source,
     PluginSource,
     TaskSource.Concurrent<BukkitTask, MinecraftTaskBuilder<BukkitTask>>
 {
