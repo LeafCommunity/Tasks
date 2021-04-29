@@ -20,15 +20,16 @@ public interface Unless
     
     static Unless any(List<Unless> caveats) { return () -> caveats.stream().anyMatch(Unless::criteria); }
     
-    static Builder builder() { return new UnlessBuilderImpl(); }
+    @SuppressWarnings("NullableProblems") // literally ?
+    static Builder<?> builder() { return new UnlessBuilderImpl(); }
     
     interface Source
     {
         Unless unless();
     }
     
-    interface Builder extends Source
+    interface Builder<B extends Builder<B>> extends Source
     {
-        Builder unless(Unless criteria);
+        B unless(Unless criteria);
     }
 }

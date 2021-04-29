@@ -9,11 +9,11 @@ package community.leaf.tasks.executors;
 
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
-import community.leaf.tasks.WrappedTaskContext;
+import community.leaf.tasks.TaskContext;
 
 import java.util.concurrent.Future;
 
-public class ExecutorTaskContext extends WrappedTaskContext<Future<?>>
+public final class ExecutorTaskContext extends TaskContext.Wrapper<Future<?>>
 {
     public ExecutorTaskContext(Schedule schedule)
     {

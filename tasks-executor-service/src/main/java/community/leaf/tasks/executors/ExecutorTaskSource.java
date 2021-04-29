@@ -25,7 +25,7 @@ public interface ExecutorTaskSource extends ExecutorServiceSource, TaskSource<Fu
     @Override
     default ScheduledTaskBuilder.Constructor<Future<?>, TaskBuilder<Future<?>>> getTaskBuilderConstructor()
     {
-        return TaskBuilder::new;
+        return TaskBuilder::builder;
     }
     
     @FunctionalInterface

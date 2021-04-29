@@ -9,10 +9,10 @@ package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
-import community.leaf.tasks.WrappedTaskContext;
+import community.leaf.tasks.TaskContext;
 import org.bukkit.scheduler.BukkitTask;
 
-public final class BukkitTaskContext extends WrappedTaskContext<BukkitTask>
+public final class BukkitTaskContext extends TaskContext.Wrapper<BukkitTask>
 {
     protected BukkitTaskContext(Schedule schedule) { super(schedule); }
     

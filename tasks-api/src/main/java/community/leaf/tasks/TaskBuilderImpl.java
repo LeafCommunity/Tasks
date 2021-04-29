@@ -7,10 +7,10 @@
  */
 package community.leaf.tasks;
 
-public interface TaskBuilder<T> extends ScheduledTaskBuilder<T, TaskBuilder<T>, Pending<TaskBuilder<T>>>
+final class TaskBuilderImpl<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, Pending<TaskBuilder<T>>> implements TaskBuilder<T>
 {
-    static <T> TaskBuilder<T> builder(TaskScheduler<T> scheduler, Concurrency concurrency)
+    TaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        return new TaskBuilderImpl<>(scheduler, concurrency);
+        super(scheduler, concurrency, Pending.Milliseconds::new);
     }
 }

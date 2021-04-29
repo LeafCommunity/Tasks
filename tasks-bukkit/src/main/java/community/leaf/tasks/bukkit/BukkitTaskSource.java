@@ -25,9 +25,8 @@ public interface BukkitTaskSource extends
     }
     
     @Override
-    default ScheduledTaskBuilder.Constructor<BukkitTask, MinecraftTaskBuilder<BukkitTask>>
-        getTaskBuilderConstructor()
+    default ScheduledTaskBuilder.Constructor<BukkitTask, MinecraftTaskBuilder<BukkitTask>> getTaskBuilderConstructor()
     {
-        return MinecraftTaskBuilder::new;
+        return MinecraftTaskBuilder::builder;
     }
 }

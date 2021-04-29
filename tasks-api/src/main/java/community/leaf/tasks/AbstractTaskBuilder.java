@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B, P>, P extends Pending<B>>
+public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B, P>, P extends Pending<B>>
     implements ScheduledTaskBuilder<T, B, P>
 {
     protected final TaskScheduler<T> scheduler;
@@ -24,7 +24,9 @@ public abstract class AbstractTaskBuilder<T, B extends AbstractTaskBuilder<T, B,
     private long period;
     
     private Repeats.Expected repeats = Repeats.Constantly.NEVER;
-    private Unless.@NullOr Builder cancellation = null;
+    
+    @SuppressWarnings("NullableProblems") // ?
+    private Unless.@NullOr Builder<?> cancellation = null;
     
     protected AbstractTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency, Pending.Constructor<B, P> pending)
     {

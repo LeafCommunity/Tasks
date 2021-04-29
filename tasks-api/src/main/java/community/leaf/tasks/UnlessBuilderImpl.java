@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-class UnlessBuilderImpl implements Unless.Builder
+final class UnlessBuilderImpl implements Unless.Builder<UnlessBuilderImpl>
 {
     private final List<Unless> caveats = new ArrayList<>();
     

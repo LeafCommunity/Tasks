@@ -9,8 +9,8 @@ package community.leaf.tasks.executors;
 
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
+import community.leaf.tasks.TaskContext;
 import community.leaf.tasks.TaskScheduler;
-import community.leaf.tasks.WrappedTaskContext;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskScheduler<Future<?>>
 {
     @Override
-    default WrappedTaskContext<Future<?>> context(Schedule schedule)
+    default TaskContext.Wrapper<Future<?>> context(Schedule schedule)
     {
         return new ExecutorTaskContext(schedule);
     }
