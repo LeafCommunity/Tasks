@@ -7,15 +7,15 @@
  */
 package community.leaf.tasks.executors;
 
+import community.leaf.tasks.AbstractTaskContext;
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
-import community.leaf.tasks.TaskContext;
 
 import java.util.concurrent.Future;
 
-public final class ExecutorTaskContext extends TaskContext.Wrapper<Future<?>>
+final class ExecutorTaskContext extends AbstractTaskContext<Future<?>>
 {
-    public ExecutorTaskContext(Schedule schedule)
+    ExecutorTaskContext(Schedule schedule)
     {
         super(schedule);
     }

@@ -7,14 +7,14 @@
  */
 package community.leaf.tasks.bukkit;
 
+import community.leaf.tasks.AbstractTaskContext;
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
-import community.leaf.tasks.TaskContext;
 import org.bukkit.scheduler.BukkitTask;
 
-public final class BukkitTaskContext extends TaskContext.Wrapper<BukkitTask>
+final class BukkitTaskContext extends AbstractTaskContext<BukkitTask>
 {
-    protected BukkitTaskContext(Schedule schedule) { super(schedule); }
+    BukkitTaskContext(Schedule schedule) { super(schedule); }
     
     @Override
     public boolean isCancelled() { return task().isCancelled(); }

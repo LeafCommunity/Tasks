@@ -9,6 +9,7 @@ package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
+import community.leaf.tasks.TaskContext;
 import community.leaf.tasks.TaskScheduler;
 import community.leaf.tasks.minecraft.Ticks;
 import org.bukkit.plugin.Plugin;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitTask>
 {
     @Override
-    default BukkitTaskContext context(Schedule schedule)
+    default TaskContext<BukkitTask> context(Schedule schedule)
     {
         return new BukkitTaskContext(schedule);
     }

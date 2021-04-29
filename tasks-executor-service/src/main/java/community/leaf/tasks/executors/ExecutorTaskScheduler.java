@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskScheduler<Future<?>>
 {
     @Override
-    default TaskContext.Wrapper<Future<?>> context(Schedule schedule)
+    default TaskContext<Future<?>> context(Schedule schedule)
     {
         return new ExecutorTaskContext(schedule);
     }
