@@ -67,6 +67,12 @@ final class BukkitPlayerSession implements PlayerSession
         player.removeMetadata(KEY, plugin);
     }
     
+    static void endAll(Plugin plugin)
+    {
+        Objects.requireNonNull(plugin, "plugin");
+        plugin.getServer().getOnlinePlayers().forEach(player -> player.removeMetadata(KEY, plugin));
+    }
+    
     static Unless expired(Plugin plugin, Player player)
     {
         // validated in getOrStart()

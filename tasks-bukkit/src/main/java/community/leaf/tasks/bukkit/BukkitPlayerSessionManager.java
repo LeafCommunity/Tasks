@@ -44,7 +44,10 @@ public interface BukkitPlayerSessionManager extends PlayerSessionManager<Player>
     }
     
     @Override
-    default void endAll() {} // TODO: end them all...
+    default void endAll()
+    {
+        BukkitPlayerSession.endAll(plugin());
+    }
     
     @Override
     default Unless expired(Player player)
