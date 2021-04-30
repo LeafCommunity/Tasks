@@ -7,13 +7,16 @@
  */
 package community.leaf.tasks;
 
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
 @SuppressWarnings("unused")
 public interface Pending<B>
 {
+    static <B> Pending<B> milliseconds(LongFunction<B> function, long units)
+    {
+        return new AbstractPending<>(function, units) {};
+    }
+    
     B milliseconds();
     
     B seconds();
@@ -27,43 +30,5 @@ public interface Pending<B>
     interface Constructor<B, P extends Pending<B>>
     {
         P construct(LongFunction<B> function, long units);
-    }
-    
-    @SuppressWarnings("NullableProblems") // there are no such problems
-    class Milliseconds<B> implements Pending<B>
-    {
-        protected final LongFunction<B> function;
-        protected final long units;
-        
-        public Milliseconds(LongFunction<B> function, long units)
-        {
-            this.function = Objects.requireNonNull(function, "function");
-            this.units = units;
-        }
-        
-        protected B applyMilliseconds(long milliseconds)
-        {
-            return function.apply(milliseconds);
-        }
-        
-        protected B applyUnit(TimeUnit unit)
-        {
-            return applyMilliseconds(TimeUnit.MILLISECONDS.convert(units, unit));
-        }
-        
-        @Override
-        public B milliseconds() { return applyMilliseconds(units); }
-        
-        @Override
-        public B seconds() { return applyUnit(TimeUnit.SECONDS); }
-        
-        @Override
-        public B minutes() { return applyUnit(TimeUnit.MINUTES); }
-        
-        @Override
-        public B hours() { return applyUnit(TimeUnit.HOURS); }
-        
-        @Override
-        public B days() { return applyUnit(TimeUnit.DAYS); }
     }
 }

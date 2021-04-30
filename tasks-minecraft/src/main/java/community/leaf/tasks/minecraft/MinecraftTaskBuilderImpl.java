@@ -17,6 +17,6 @@ final class MinecraftTaskBuilderImpl<T>
 {
     MinecraftTaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(scheduler, concurrency, Ticks.PendingTicks::new);
+        super(scheduler, concurrency, Ticks::pending);
     }
 }

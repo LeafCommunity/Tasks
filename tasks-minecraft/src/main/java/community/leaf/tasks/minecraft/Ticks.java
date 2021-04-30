@@ -14,6 +14,13 @@ import java.util.function.LongFunction;
 
 public interface Ticks<B> extends Pending<B>
 {
+    static <B> Ticks<B> pending(LongFunction<B> function, long units)
+    {
+        return new AbstractTicks<>(function, units) {};
+    }
+    
+    B ticks();
+    
     /**
      * Convert from a duration of time to Minecraft ticks.
      *
@@ -61,22 +68,5 @@ public interface Ticks<B> extends Pending<B>
     static int intoInteger(int ticks, TimeUnit unit)
     {
         return Long.valueOf(into(ticks, unit)).intValue();
-    }
-    
-    B ticks();
-    
-    class PendingTicks<B> extends Milliseconds<B> implements Ticks<B>
-    {
-        public PendingTicks(LongFunction<B> pendingFunction, long units)
-        {
-            super(pendingFunction, units);
-        }
-        
-        @SuppressWarnings("NullableProblems") // nope
-        @Override
-        public B ticks()
-        {
-            return applyMilliseconds(into(super.units, TimeUnit.MILLISECONDS));
-        }
     }
 }

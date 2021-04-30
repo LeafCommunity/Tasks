@@ -11,6 +11,6 @@ final class TaskBuilderImpl<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, Pe
 {
     TaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        super(scheduler, concurrency, Pending.Milliseconds::new);
+        super(scheduler, concurrency, Pending::milliseconds);
     }
 }
