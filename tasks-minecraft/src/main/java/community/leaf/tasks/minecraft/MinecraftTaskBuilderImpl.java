@@ -7,14 +7,16 @@
  */
 package community.leaf.tasks.minecraft;
 
+import community.leaf.tasks.AbstractTaskBuilder;
 import community.leaf.tasks.Concurrency;
-import community.leaf.tasks.ScheduledTaskBuilder;
 import community.leaf.tasks.TaskScheduler;
 
-public interface MinecraftTaskBuilder<T>extends ScheduledTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
+final class MinecraftTaskBuilderImpl<T>
+    extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
+    implements MinecraftTaskBuilder<T>
 {
-    static <T> MinecraftTaskBuilder<T> builder(TaskScheduler<T> scheduler, Concurrency concurrency)
+    MinecraftTaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
-        return new MinecraftTaskBuilderImpl<>(scheduler, concurrency);
+        super(scheduler, concurrency, Ticks::pending);
     }
 }

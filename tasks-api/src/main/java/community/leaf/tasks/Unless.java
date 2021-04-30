@@ -18,8 +18,18 @@ public interface Unless
     
     static boolean never() { return false; }
     
-    static Unless any(List<Unless> caveats)
+    static Unless any(List<Unless> caveats) { return () -> caveats.stream().anyMatch(Unless::criteria); }
+    
+    @SuppressWarnings("NullableProblems") // literally ?
+    static Builder<?> builder() { return new UnlessBuilderImpl(); }
+    
+    interface Source
     {
-        return () -> caveats.stream().anyMatch(Unless::criteria);
+        Unless unless();
+    }
+    
+    interface Builder<B extends Builder<B>> extends Source
+    {
+        B unless(Unless criteria);
     }
 }

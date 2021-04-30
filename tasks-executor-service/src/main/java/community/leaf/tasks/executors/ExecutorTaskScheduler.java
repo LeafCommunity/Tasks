@@ -8,9 +8,9 @@
 package community.leaf.tasks.executors;
 
 import community.leaf.tasks.Concurrency;
-import community.leaf.tasks.Repeats;
+import community.leaf.tasks.Schedule;
+import community.leaf.tasks.TaskContext;
 import community.leaf.tasks.TaskScheduler;
-import community.leaf.tasks.WrappedTaskContext;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -19,25 +19,25 @@ import java.util.concurrent.TimeUnit;
 public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskScheduler<Future<?>>
 {
     @Override
-    default WrappedTaskContext<Future<?>> createTaskContext(Concurrency concurrency, Repeats.Expected repeats)
+    default TaskContext<Future<?>> context(Schedule schedule)
     {
-        return new ExecutorTaskContext(concurrency, repeats);
+        return new ExecutorTaskContext(schedule);
     }
     
     @Override
-    default Future<?> runTask(Concurrency concurrency, Runnable runnable)
+    default Future<?> now(Concurrency concurrency, Runnable runnable)
     {
         return executor(concurrency).submit(runnable);
     }
     
     @Override
-    default Future<?> runFutureTask(Concurrency concurrency, Runnable runnable, long delay)
+    default Future<?> future(Concurrency concurrency, Runnable runnable, long delay)
     {
         return executor(concurrency).schedule(runnable, delay, TimeUnit.MILLISECONDS);
     }
     
     @Override
-    default Future<?> runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period)
+    default Future<?> repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
         return executor(concurrency).scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
     }

@@ -7,6 +7,9 @@
  */
 package community.leaf.tasks;
 
+import pl.tlinkowski.annotation.basic.NullOr;
+
+import java.util.Objects;
 import java.util.function.LongPredicate;
 
 public enum Repeats
@@ -14,6 +17,13 @@ public enum Repeats
     NEVER(reps -> reps == 0),
     FINITE(reps -> reps >= 1),
     FOREVER(reps -> reps <= -1);
+    
+    public static Expected expect(long repetitions)
+    {
+        if (NEVER.validity.test(repetitions)) { return Constantly.NEVER; }
+        if (FOREVER.validity.test(repetitions)) { return Constantly.FOREVER; }
+        return FINITE.expecting(repetitions);
+    }
     
     private final LongPredicate validity;
     
@@ -34,21 +44,39 @@ public enum Repeats
         public long repetitions() { return repetitions; }
         
         public Repeats until() { return Repeats.this; }
+    
+        @Override
+        public String toString()
+        {
+            return "Expected{" +
+                "repetitions=" + repetitions +
+                ", until=" + until() +
+                '}';
+        }
+    
+        @Override
+        public boolean equals(@NullOr Object o)
+        {
+            if (this == o) { return true; }
+            if (o == null || getClass() != o.getClass()) { return false; }
+            
+            Expected that = (Expected) o;
+            return repetitions == that.repetitions && until() == that.until();
+        }
+    
+        @Override
+        public int hashCode()
+        {
+            return Objects.hash(repetitions, Repeats.this);
+        }
     }
     
-    public static class Constant
+    public static class Constantly
     {
-        private Constant() { throw new UnsupportedOperationException(); }
+        private Constantly() { throw new UnsupportedOperationException(); }
         
         public static final Expected NEVER = Repeats.NEVER.expecting(0);
         
         public static final Expected FOREVER = Repeats.FOREVER.expecting(-1);
-    }
-    
-    public static Expected expect(long repetitions)
-    {
-        if (NEVER.validity.test(repetitions)) { return Constant.NEVER; }
-        if (FOREVER.validity.test(repetitions)) { return Constant.FOREVER; }
-        return FINITE.expecting(repetitions);
     }
 }

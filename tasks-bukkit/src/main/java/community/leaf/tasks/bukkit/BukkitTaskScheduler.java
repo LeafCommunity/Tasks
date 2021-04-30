@@ -8,7 +8,8 @@
 package community.leaf.tasks.bukkit;
 
 import community.leaf.tasks.Concurrency;
-import community.leaf.tasks.Repeats;
+import community.leaf.tasks.Schedule;
+import community.leaf.tasks.TaskContext;
 import community.leaf.tasks.TaskScheduler;
 import community.leaf.tasks.minecraft.Ticks;
 import org.bukkit.plugin.Plugin;
@@ -21,13 +22,13 @@ import java.util.concurrent.TimeUnit;
 public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitTask>
 {
     @Override
-    default BukkitTaskContext createTaskContext(Concurrency concurrency, Repeats.Expected repeats)
+    default TaskContext<BukkitTask> context(Schedule schedule)
     {
-        return new BukkitTaskContext(repeats);
+        return new BukkitTaskContext(schedule);
     }
     
     @Override
-    default BukkitTask runTask(Concurrency concurrency, Runnable runnable)
+    default BukkitTask now(Concurrency concurrency, Runnable runnable)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
@@ -43,10 +44,11 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
     }
     
     @Override
-    default BukkitTask runFutureTask(Concurrency concurrency, Runnable runnable, long delay)
+    default BukkitTask future(Concurrency concurrency, Runnable runnable, long delay)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        
         long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
         
         if (concurrency == Concurrency.SYNC)
@@ -60,10 +62,11 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
     }
     
     @Override
-    default BukkitTask runRepeatingTask(Concurrency concurrency, Runnable runnable, long delay, long period)
+    default BukkitTask repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
     {
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        
         long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
         long periodInTicks = Ticks.from(period, TimeUnit.MILLISECONDS);
     

@@ -7,19 +7,20 @@
  */
 package community.leaf.tasks.minecraft;
 
-import community.leaf.tasks.AbstractTaskBuilder;
-import community.leaf.tasks.PendingMilliseconds;
+import community.leaf.tasks.AbstractPending;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
-public class PendingTicks<B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>> extends PendingMilliseconds<B>
+public abstract class AbstractTicks<B> extends AbstractPending<B> implements Ticks<B>
 {
-    public PendingTicks(LongFunction<B> pendingFunction, long units)
+    protected AbstractTicks(LongFunction<B> pendingFunction, long units)
     {
         super(pendingFunction, units);
     }
     
+    @SuppressWarnings("NullableProblems") // nope
+    @Override
     public B ticks()
     {
         return applyMilliseconds(Ticks.into(super.units, TimeUnit.MILLISECONDS));

@@ -5,9 +5,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package community.leaf.tasks.executors;
+package community.leaf.tasks;
 
-import community.leaf.tasks.SyncTaskSource;
-import community.leaf.tasks.TaskBuilder;
-
-public interface SyncExecutorTaskSource extends ExecutorTaskSource, SyncTaskSource<TaskBuilder> {}
+@SuppressWarnings("UnusedReturnValue")
+public interface TaskRunner<T>
+{
+    TaskContext<T> run(ContextualRunnable<T> runnable);
+    
+    default TaskContext<T> run(Runnable runnable)
+    {
+        return run(task -> runnable.run());
+    }
+}

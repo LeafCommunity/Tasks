@@ -13,26 +13,29 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class WrappedTaskContext<T> implements TaskContext
+public abstract class AbstractTaskContext<T> implements TaskContext<T>
 {
     private final AtomicLong iterations = new AtomicLong();
     private final AtomicReference<@NullOr T> wrapped = new AtomicReference<>();
     
-    private final Repeats.Expected repeats;
+    private final Schedule schedule;
     
-    public WrappedTaskContext(Repeats.Expected repeats)
+    protected AbstractTaskContext(Schedule schedule)
     {
-        this.repeats = Objects.requireNonNull(repeats, "repeats");
+        this.schedule = Objects.requireNonNull(schedule, "schedule");
     }
     
     @Override
     public final long iterations() { return iterations.get(); }
     
+    @Override
     public final void iterate() { iterations.incrementAndGet(); }
     
     @Override
-    public final Repeats.Expected repeats() { return repeats; }
+    public final Schedule schedule() { return schedule; }
     
+    @SuppressWarnings("NullableProblems") // no problems...
+    @Override
     public final T task()
     {
         @NullOr T task = wrapped.get();
@@ -40,13 +43,11 @@ public abstract class WrappedTaskContext<T> implements TaskContext
         throw new IllegalStateException("No task wrapped yet");
     }
     
-    public final T wrap(T unwrapped)
+    @Override
+    public final void task(T task)
     {
-        // If compareAndExchange() is successful, it will return null since it
-        // always returns the current value (which should not by initialized yet).
-        // Otherwise, throw an exception for attempting to re-wrap with something else.
-        
-        if (wrapped.compareAndExchange(null, unwrapped) == null) { return unwrapped; }
+        // Expecting existing to be null (should not be initialized yet).
+        if (wrapped.compareAndSet(null, task)) { return; }
         throw new IllegalStateException("Already contains a wrapped task");
     }
 }

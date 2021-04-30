@@ -7,5 +7,10 @@
  */
 package community.leaf.tasks;
 
-public interface ConcurrentTaskSource<B extends AbstractTaskBuilder<B, ? extends PendingMilliseconds<B>>>
-    extends SyncTaskSource<B>, AsyncTaskSource<B> {}
+final class TaskBuilderImpl<T> extends AbstractTaskBuilder<T, TaskBuilder<T>, Pending<TaskBuilder<T>>> implements TaskBuilder<T>
+{
+    TaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
+    {
+        super(scheduler, concurrency, Pending::milliseconds);
+    }
+}

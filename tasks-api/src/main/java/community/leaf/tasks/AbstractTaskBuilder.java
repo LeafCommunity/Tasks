@@ -9,147 +9,103 @@ package community.leaf.tasks;
 
 import pl.tlinkowski.annotation.basic.NullOr;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, P>, P extends PendingMilliseconds<B>> implements Schedulable
+public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B, P>, P extends Pending<B>>
+    implements ScheduledTaskBuilder<T, B, P>
 {
+    protected final TaskScheduler<T> scheduler;
     protected final Concurrency concurrency;
-    protected final TaskScheduler<?> scheduler;
+    protected final Pending.Constructor<B, P> pending;
     
     private long delay;
     private long period;
     
-    private @NullOr List<Unless> cancellation = null;
-    private Repeats.Expected repeats = Repeats.Constant.NEVER;
+    private Repeats.Expected repeats = Repeats.Constantly.NEVER;
     
-    public AbstractTaskBuilder(Concurrency concurrency, TaskScheduler<?> scheduler)
+    @SuppressWarnings("NullableProblems") // ?
+    private Unless.@NullOr Builder<?> cancellation = null;
+    
+    protected AbstractTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency, Pending.Constructor<B, P> pending)
     {
-        this.concurrency = Objects.requireNonNull(concurrency, "concurrency");
         this.scheduler = Objects.requireNonNull(scheduler, "scheduler");
+        this.concurrency = Objects.requireNonNull(concurrency, "concurrency");
+        this.pending = Objects.requireNonNull(pending, "pending");
     }
-    
-    protected abstract P pending(LongFunction<B> function, long units);
     
     @SuppressWarnings("unchecked")
     protected final B self() { return (B) this; }
     
     @Override
-    public final Concurrency concurrency() { return concurrency; }
+    public final P pending(LongFunction<B> function, long units)
+    {
+        return pending.construct(function, units);
+    }
     
     @Override
-    public long delay() { return delay; }
+    public final Schedule schedule() { return Schedule.schedule(concurrency, delay, period, repeats); }
     
-    public B delayByMilliseconds(long milliseconds)
+    @Override
+    public final B delayByMilliseconds(long milliseconds)
     {
         delay = milliseconds;
         return self();
     }
     
-    public B delay(long duration, TimeUnit unit)
-    {
-        return delayByMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
-    }
-    
-    public P delay(long pendingDuration)
-    {
-        return pending(this::delayByMilliseconds, pendingDuration);
-    }
-    
     @Override
-    public long period() { return period; }
-    
-    public B everyFewMilliseconds(long milliseconds)
+    public final B everyFewMilliseconds(long milliseconds)
     {
-        if (repeats.until() == Repeats.NEVER) { repeats = Repeats.Constant.FOREVER; }
+        if (repeats.until() == Repeats.NEVER) { repeats = Repeats.Constantly.FOREVER; }
         period = milliseconds;
         return self();
     }
     
-    public B every(long duration, TimeUnit unit)
+    @Override
+    public final B repeat(Repeats.Expected repeats)
     {
-        return everyFewMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
-    }
-    
-    public P every(long pendingDuration)
-    {
-        return pending(this::everyFewMilliseconds, pendingDuration);
+        this.repeats = Objects.requireNonNull(repeats, "repeats");
+        return self();
     }
     
     @Override
-    public Repeats.Expected repeats() { return repeats; }
-    
-    public B repeat(long repetitions)
-    {
-        repeats = Repeats.expect(repetitions);
-        return self();
-    }
-    
-    public B forever()
-    {
-        repeats = Repeats.Constant.FOREVER;
-        return self();
-    }
-    
-    public B unless(Unless criteria)
+    public final B unless(Unless criteria)
     {
         Objects.requireNonNull(criteria, "criteria");
-        if (cancellation == null) { cancellation = new ArrayList<>(); }
-        cancellation.add(criteria);
+        if (cancellation == null) { cancellation = Unless.builder(); }
+        cancellation.unless(criteria);
         return self();
     }
     
-    protected boolean isAutoCancellable()
+    @Override
+    public final Unless unless()
     {
-        return (repeats.until() == Repeats.FINITE) || (cancellation != null && !cancellation.isEmpty());
+        return (cancellation == null) ? Unless::never : cancellation.unless();
     }
     
-    protected Unless cancellationCriteria()
+    protected final boolean isAutoCancellable()
     {
-        return (cancellation == null || cancellation.isEmpty()) ? Unless::never : Unless.any(List.copyOf(cancellation));
+        return repeats.until() == Repeats.FINITE || cancellation != null;
     }
     
-    public <R extends Runnable> R run(R runnable)
+    @Override
+    public final TaskContext<T> run(ContextualRunnable<T> runnable)
     {
         Objects.requireNonNull(runnable, "runnable");
         
         if (isAutoCancellable())
         {
-            Unless cancel = cancellationCriteria();
+            Unless cancel = unless();
             
-            scheduler.schedule(this, task -> {
-                if (task.isDoneRepeating() || cancel.criteria()) { task.cancel(); }
-                else { runnable.run(); }
-            });
-        }
-        else
-        {
-            scheduler.schedule(this, runnable);
-        }
-        return runnable;
-    }
-    
-    public <R extends ContextualRunnable> R runWithContext(R runnable)
-    {
-        Objects.requireNonNull(runnable, "runnable");
-        
-        if (isAutoCancellable())
-        {
-            Unless cancel = cancellationCriteria();
-            
-            scheduler.schedule(this, task -> {
+            return scheduler.schedule(schedule(), task -> {
                 if (task.isDoneRepeating() || cancel.criteria()) { task.cancel(); }
                 else { runnable.run(task); }
             });
         }
         else
         {
-            scheduler.schedule(this, runnable);
+            return scheduler.schedule(schedule(), runnable);
         }
-        return runnable;
     }
 }

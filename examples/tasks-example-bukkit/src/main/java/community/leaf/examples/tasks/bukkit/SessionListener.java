@@ -1,6 +1,6 @@
 package community.leaf.examples.tasks.bukkit;
 
-import community.leaf.tasks.bukkit.PlayerSession;
+import community.leaf.tasks.minecraft.PlayerSession;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,12 +24,12 @@ public class SessionListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         Player player = event.getPlayer();
-        PlayerSession.start(plugin, player);
+        PlayerSession session = plugin.sessions().start(player);
         
         plugin.sync()
             .every(15).seconds().forever()
-            .unless(PlayerSession.expired(plugin, player))
-            .runWithContext(task ->
+            .unless(session::isExpired)
+            .run(task ->
             {
                 Object[] colors = Arrays.stream(ChatColor.values()).filter(ChatColor::isColor).toArray();
                 String random = String.valueOf(colors[ThreadLocalRandom.current().nextInt(colors.length)]);

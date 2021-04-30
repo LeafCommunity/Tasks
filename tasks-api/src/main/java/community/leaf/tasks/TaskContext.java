@@ -8,27 +8,31 @@
 package community.leaf.tasks;
 
 @SuppressWarnings("unused")
-public interface TaskContext
+public interface TaskContext<T> extends Schedule.Source
 {
     Concurrency concurrency();
     
     long iterations();
     
-    Repeats.Expected repeats();
+    void iterate();
     
     boolean isCancelled();
     
     void cancel();
     
-    default boolean isRepeatingForever() { return repeats().until() == Repeats.FOREVER; }
+    T task();
     
-    default boolean isRepeatingFinitely() { return repeats().until() == Repeats.FINITE; }
+    void task(T task);
     
-    default boolean isRepeating() { return repeats().until() != Repeats.NEVER; }
+    default boolean isRepeatingForever() { return schedule().repeats().until() == Repeats.FOREVER; }
+    
+    default boolean isRepeatingFinitely() { return schedule().repeats().until() == Repeats.FINITE; }
+    
+    default boolean isRepeating() { return schedule().repeats().until() != Repeats.NEVER; }
     
     default boolean isDoneRepeating()
     {
-        Repeats.Expected repeats = repeats();
+        Repeats.Expected repeats = schedule().repeats();
         return (isCancelled())
             || (repeats.until() == Repeats.NEVER && iterations() > repeats.repetitions())
             || (repeats.until() == Repeats.FINITE && iterations() >= repeats.repetitions());
@@ -38,8 +42,9 @@ public interface TaskContext
     
     default boolean isLastIteration()
     {
-        Repeats.Expected repeats = repeats();
+        Repeats.Expected repeats = schedule().repeats();
         return (repeats.until() == Repeats.NEVER)
             || (repeats.until() == Repeats.FINITE && iterations() == repeats.repetitions() - 1);
     }
+    
 }

@@ -8,7 +8,7 @@
 package community.leaf.tasks;
 
 @FunctionalInterface
-public interface ContextualRunnable
+public interface ContextualRunnable<T>
 {
-    void run(TaskContext task);
+    void run(TaskContext<T> task);
 }

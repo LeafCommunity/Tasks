@@ -7,26 +7,23 @@
  */
 package community.leaf.tasks.executors;
 
+import community.leaf.tasks.AbstractTaskContext;
 import community.leaf.tasks.Concurrency;
-import community.leaf.tasks.Repeats;
-import community.leaf.tasks.WrappedTaskContext;
+import community.leaf.tasks.Schedule;
 
 import java.util.concurrent.Future;
 
-public class ExecutorTaskContext extends WrappedTaskContext<Future<?>>
+final class ExecutorTaskContext extends AbstractTaskContext<Future<?>>
 {
-    private final Concurrency concurrency;
-    
-    public ExecutorTaskContext(Concurrency concurrency, Repeats.Expected repeats)
+    ExecutorTaskContext(Schedule schedule)
     {
-        super(repeats);
-        this.concurrency = concurrency;
+        super(schedule);
     }
     
     @Override
     public Concurrency concurrency()
     {
-        return concurrency;
+        return schedule().concurrency();
     }
     
     @Override
