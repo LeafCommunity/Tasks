@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
 @SuppressWarnings("unused")
-public interface Pending<B extends Schedule.Builder<B, ? extends Pending<B>>>
+public interface Pending<B>
 {
     B milliseconds();
     
@@ -24,12 +24,13 @@ public interface Pending<B extends Schedule.Builder<B, ? extends Pending<B>>>
     
     B days();
     
-    interface Constructor<B extends Schedule.Builder<B, P>, P extends Pending<B>>
+    interface Constructor<B, P extends Pending<B>>
     {
         P construct(LongFunction<B> function, long units);
     }
     
-    class Milliseconds<B extends Schedule.Builder<B, ? extends Pending<B>>> implements Pending<B>
+    @SuppressWarnings("NullableProblems") // there are no such problems
+    class Milliseconds<B> implements Pending<B>
     {
         protected final LongFunction<B> function;
         protected final long units;

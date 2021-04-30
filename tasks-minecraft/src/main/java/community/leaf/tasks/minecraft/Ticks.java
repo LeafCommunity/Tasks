@@ -8,12 +8,11 @@
 package community.leaf.tasks.minecraft;
 
 import community.leaf.tasks.Pending;
-import community.leaf.tasks.Schedule;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
-public interface Ticks<B extends Schedule.Builder<B, ? extends Pending<B>>> extends Pending<B>
+public interface Ticks<B> extends Pending<B>
 {
     /**
      * Convert from a duration of time to Minecraft ticks.
@@ -66,13 +65,14 @@ public interface Ticks<B extends Schedule.Builder<B, ? extends Pending<B>>> exte
     
     B ticks();
     
-    class PendingTicks<B extends Schedule.Builder<B, ? extends Pending<B>>> extends Milliseconds<B> implements Ticks<B>
+    class PendingTicks<B> extends Milliseconds<B> implements Ticks<B>
     {
         public PendingTicks(LongFunction<B> pendingFunction, long units)
         {
             super(pendingFunction, units);
         }
         
+        @SuppressWarnings("NullableProblems") // nope
         @Override
         public B ticks()
         {
