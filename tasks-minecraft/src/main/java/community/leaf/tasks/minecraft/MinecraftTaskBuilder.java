@@ -11,7 +11,7 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.ScheduledTaskBuilder;
 import community.leaf.tasks.TaskScheduler;
 
-public interface MinecraftTaskBuilder<T>extends ScheduledTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
+public interface MinecraftTaskBuilder<T> extends ScheduledTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
 {
     static <T> MinecraftTaskBuilder<T> builder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {
