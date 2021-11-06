@@ -7,6 +7,7 @@
  */
 package community.leaf.tasks;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
@@ -53,6 +54,11 @@ public interface Schedule
             return delayByMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
         }
         
+        default B delay(Duration duration)
+        {
+            return delayByMilliseconds(duration.toMillis());
+        }
+        
         default P delay(long duration)
         {
             return pending(this::delayByMilliseconds, duration);
@@ -61,6 +67,11 @@ public interface Schedule
         default B every(long duration, TimeUnit unit)
         {
             return everyFewMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
+        }
+        
+        default B every(Duration duration)
+        {
+            return delayByMilliseconds(duration.toMillis());
         }
         
         default P every(long duration)
