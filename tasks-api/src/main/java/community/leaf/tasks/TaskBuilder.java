@@ -7,7 +7,7 @@
  */
 package community.leaf.tasks;
 
-public interface TaskBuilder<T> extends ScheduledTaskBuilder<T, TaskBuilder<T>, Pending<TaskBuilder<T>>>
+public interface TaskBuilder<T> extends ScheduledTaskBuilder<T, TaskBuilder<T>>
 {
     static <T> TaskBuilder<T> builder(TaskScheduler<T> scheduler, Concurrency concurrency)
     {

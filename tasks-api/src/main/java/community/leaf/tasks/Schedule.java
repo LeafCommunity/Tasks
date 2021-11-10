@@ -9,7 +9,6 @@ package community.leaf.tasks;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-import java.util.function.LongFunction;
 
 public interface Schedule
 {
@@ -39,45 +38,37 @@ public interface Schedule
         Schedule schedule();
     }
     
-    interface Builder<B extends Builder<B, P>, P extends Pending<B>> extends Source
+    interface Builder<B extends Builder<B>> extends Source
     {
-        P pending(LongFunction<B> function, long units);
-        
         B delayByMilliseconds(long milliseconds);
-        
-        B everyFewMilliseconds(long milliseconds);
-        
-        B repeat(Repeats.Expected repeats);
-        
+    
         default B delay(long duration, TimeUnit unit)
         {
             return delayByMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
         }
-        
+    
         default B delay(Duration duration)
         {
             return delayByMilliseconds(duration.toMillis());
         }
+    
+        Pending<B> delay(long duration);
         
-        default P delay(long duration)
-        {
-            return pending(this::delayByMilliseconds, duration);
-        }
-        
+        B everyFewMilliseconds(long milliseconds);
+    
         default B every(long duration, TimeUnit unit)
         {
             return everyFewMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
         }
-        
+    
         default B every(Duration duration)
         {
             return delayByMilliseconds(duration.toMillis());
         }
+    
+        Pending<B> every(long duration);
         
-        default P every(long duration)
-        {
-            return pending(this::everyFewMilliseconds, duration);
-        }
+        B repeat(Repeats.Expected repeats);
         
         default B repeat(long repetitions)
         {

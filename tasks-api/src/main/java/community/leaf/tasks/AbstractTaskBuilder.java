@@ -13,8 +13,8 @@ import java.util.Objects;
 import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B, P>, P extends Pending<B>>
-    implements ScheduledTaskBuilder<T, B, P>
+public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B>, P extends Pending<B>>
+    implements ScheduledTaskBuilder<T, B>
 {
     protected final TaskScheduler<T> scheduler;
     protected final Concurrency concurrency;
@@ -38,11 +38,7 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     @SuppressWarnings("unchecked")
     protected final B self() { return (B) this; }
     
-    @Override
-    public final P pending(LongFunction<B> function, long units)
-    {
-        return pending.construct(function, units);
-    }
+    protected final P pending(LongFunction<B> function, long units) { return pending.construct(function, units); }
     
     @Override
     public final Schedule schedule() { return Schedule.schedule(concurrency, delay, period, repeats); }
@@ -55,11 +51,23 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     }
     
     @Override
+    public P delay(long duration)
+    {
+        return pending(this::delayByMilliseconds, duration);
+    }
+    
+    @Override
     public final B everyFewMilliseconds(long milliseconds)
     {
         if (repeats.until() == Repeats.NEVER) { repeats = Repeats.Constantly.FOREVER; }
         period = milliseconds;
         return self();
+    }
+    
+    @Override
+    public P every(long duration)
+    {
+        return pending(this::everyFewMilliseconds, duration);
     }
     
     @Override
