@@ -38,8 +38,6 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     @SuppressWarnings("unchecked")
     protected final B self() { return (B) this; }
     
-    protected final P pending(LongFunction<B> function, long units) { return pending.construct(function, units); }
-    
     @Override
     public final Schedule schedule() { return Schedule.schedule(concurrency, delay, period, repeats); }
     
@@ -53,7 +51,7 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     @Override
     public P delay(long duration)
     {
-        return pending(this::delayByMilliseconds, duration);
+        return pending.construct(this::delayByMilliseconds, duration);
     }
     
     @Override
@@ -67,7 +65,7 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     @Override
     public P every(long duration)
     {
-        return pending(this::everyFewMilliseconds, duration);
+        return pending.construct(this::everyFewMilliseconds, duration);
     }
     
     @Override
