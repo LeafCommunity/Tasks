@@ -20,7 +20,6 @@ public interface Unless
     
     static Unless any(List<Unless> caveats) { return () -> caveats.stream().anyMatch(Unless::criteria); }
     
-    @SuppressWarnings("NullableProblems") // literally ?
     static Builder<?> builder() { return new UnlessBuilderImpl(); }
     
     interface Source

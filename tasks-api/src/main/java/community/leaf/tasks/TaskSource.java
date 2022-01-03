@@ -29,5 +29,5 @@ public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B>>
         }
     }
     
-    interface Concurrent<T, B extends ScheduledTaskBuilder<T, B>> extends Async<T, B>, Sync<T, B> {};
+    interface Concurrent<T, B extends ScheduledTaskBuilder<T, B>> extends Async<T, B>, Sync<T, B> {}
 }

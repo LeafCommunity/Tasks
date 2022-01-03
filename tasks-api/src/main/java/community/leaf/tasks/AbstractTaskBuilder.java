@@ -10,7 +10,6 @@ package community.leaf.tasks;
 import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.Objects;
-import java.util.function.LongFunction;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B>, P extends Pending<B>>
@@ -25,7 +24,6 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     
     private Repeats.Expected repeats = Repeats.Constantly.NEVER;
     
-    @SuppressWarnings("NullableProblems") // ?
     private Unless.@NullOr Builder<?> cancellation = null;
     
     protected AbstractTaskBuilder(TaskScheduler<T> scheduler, Concurrency concurrency, Pending.Constructor<B, P> pending)

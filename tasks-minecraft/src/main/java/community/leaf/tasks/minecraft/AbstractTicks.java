@@ -19,7 +19,6 @@ public abstract class AbstractTicks<B> extends AbstractPending<B> implements Tic
         super(pendingFunction, units);
     }
     
-    @SuppressWarnings("NullableProblems") // nope
     @Override
     public B ticks()
     {

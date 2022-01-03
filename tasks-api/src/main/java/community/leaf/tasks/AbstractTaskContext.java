@@ -34,7 +34,6 @@ public abstract class AbstractTaskContext<T> implements TaskContext<T>
     @Override
     public final Schedule schedule() { return schedule; }
     
-    @SuppressWarnings("NullableProblems") // no problems...
     @Override
     public final T task()
     {

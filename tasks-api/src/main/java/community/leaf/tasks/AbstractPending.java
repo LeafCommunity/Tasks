@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
-@SuppressWarnings("NullableProblems") // there are no such problems
 public abstract class AbstractPending<B> implements Pending<B>
 {
     protected final LongFunction<B> function;
