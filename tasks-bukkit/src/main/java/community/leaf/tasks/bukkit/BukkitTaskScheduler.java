@@ -49,7 +49,7 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         
-        long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
+        long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
         
         if (concurrency == Concurrency.SYNC)
         {
@@ -67,8 +67,8 @@ public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitT
         Plugin plugin = plugin();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         
-        long delayInTicks = Ticks.from(delay, TimeUnit.MILLISECONDS);
-        long periodInTicks = Ticks.from(period, TimeUnit.MILLISECONDS);
+        long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
+        long periodInTicks = Ticks.of(period, TimeUnit.MILLISECONDS);
     
         if (concurrency == Concurrency.SYNC)
         {

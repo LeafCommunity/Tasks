@@ -22,6 +22,6 @@ public abstract class AbstractTicks<B> extends AbstractPending<B> implements Tic
     @Override
     public B ticks()
     {
-        return applyMilliseconds(Ticks.into(super.units, TimeUnit.MILLISECONDS));
+        return applyMilliseconds(Ticks.convertToUnit(super.units, TimeUnit.MILLISECONDS));
     }
 }

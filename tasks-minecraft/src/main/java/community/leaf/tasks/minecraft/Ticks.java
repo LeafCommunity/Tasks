@@ -9,6 +9,8 @@ package community.leaf.tasks.minecraft;
 
 import community.leaf.tasks.Pending;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
@@ -22,51 +24,53 @@ public interface Ticks<B> extends Pending<B>
     B ticks();
     
     /**
-     * Convert from a duration of time to Minecraft ticks.
+     * Convert a duration of time into Minecraft ticks.
      *
-     * @param sourceDuration    duration of time units
-     * @param sourceUnit        unit of time
-     * @return  ticks equivalent of the duration
+     * @param duration  duration of time units
+     * @param unit      unit of time
+     *
+     * @return ticks equivalent of the duration
      */
-    static long from(long sourceDuration, TimeUnit sourceUnit)
+    static long of(long duration, TimeUnit unit)
     {
         // 1 tick = 50 milliseconds
-        return TimeUnit.MILLISECONDS.convert(sourceDuration, sourceUnit) / 50;
+        return TimeUnit.MILLISECONDS.convert(duration, unit) / 50;
     }
     
     /**
-     * Convert from a duration of time to Minecraft ticks.
+     * Convert a duration of time into Minecraft ticks.
      *
-     * @param sourceDuration    duration of integer time units
-     * @param sourceUnit        unit of time
-     * @return  ticks equivalent of the duration as an integer
+     * @param duration  duration of time units
+     *
+     * @return ticks equivalent of the duration
      */
-    static int fromInteger(int sourceDuration, TimeUnit sourceUnit)
+    static long of(Duration duration)
     {
-        return (int) from(sourceDuration, sourceUnit);
+        return duration.toMillis() / 50;
     }
     
     /**
-     * Convert from Minecraft ticks to a duration of time.
+     * Converts Minecraft ticks into units of the provided unit.
      *
-     * @param ticks number of ticks
-     * @param unit  unit of time
-     * @return      units of time equivalent to ticks
+     * @param ticks     number of ticks
+     * @param unit      unit of time
+     *
+     * @return provided-unit units of time equivalent to ticks
      */
-    static long into(long ticks, TimeUnit unit)
+    static long convertToUnit(long ticks, TimeUnit unit)
     {
         return unit.convert(ticks * 50, TimeUnit.MILLISECONDS);
     }
     
     /**
-     * Convert from Minecraft ticks to a duration of time.
+     * Converts from Minecraft ticks into a duration of time.
      *
-     * @param ticks integer number of ticks
-     * @param unit  unit of time
-     * @return      units of time equivalent to ticks as an integer
+     * @param ticks     number of ticks
+     *
+     * @return duration equivalent of provided ticks
      */
-    static int intoInteger(int ticks, TimeUnit unit)
+    static Duration duration(long ticks)
     {
-        return Long.valueOf(into(ticks, unit)).intValue();
+        return Duration.of(ticks * 50, ChronoUnit.MILLIS);
     }
 }

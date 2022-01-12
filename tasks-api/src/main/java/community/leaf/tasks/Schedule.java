@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface Schedule
 {
-    static Schedule schedule(Concurrency concurrency, long delay, long period, Repeats.Expected repeats)
+    static Schedule of(Concurrency concurrency, long delay, long period, Repeats.Expected repeats)
     {
         return new ScheduleImpl(concurrency, delay, period, repeats);
     }
@@ -20,7 +20,7 @@ public interface Schedule
     static Schedule immutable(Schedule schedule)
     {
         if (schedule instanceof ScheduleImpl) { return schedule; }
-        return schedule(schedule.concurrency(), schedule.delay(), schedule.period(), schedule.repeats());
+        return of(schedule.concurrency(), schedule.delay(), schedule.period(), schedule.repeats());
     }
     
     Concurrency concurrency();

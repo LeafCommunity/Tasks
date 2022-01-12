@@ -37,7 +37,7 @@ public abstract class AbstractTaskBuilder<T, B extends ScheduledTaskBuilder<T, B
     protected final B self() { return (B) this; }
     
     @Override
-    public final Schedule schedule() { return Schedule.schedule(concurrency, delay, period, repeats); }
+    public final Schedule schedule() { return Schedule.of(concurrency, delay, period, repeats); }
     
     @Override
     public final B delayByMilliseconds(long milliseconds)
