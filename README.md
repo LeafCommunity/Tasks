@@ -4,7 +4,7 @@
 [jitpack-version-badge]: https://jitpack.io/v/community.leaf/tasks.svg
 
 [jitpack-downloads]: https://jitpack.io/#community.leaf/tasks "JitPack downloads this month"
-[jitpack-downloads-badge]: https://img.shields.io/badge/dynamic/json?url=https://jitpack.io/api/downloads/community.leaf/tasks&label=Downloads&query=$.month&color=ok
+[jitpack-downloads-badge]: https://img.shields.io/badge/dynamic/json?url=https://jitpack.io/api/downloads/community.leaf/tasks&label=Monthly+Downloads&query=$.month&color=ok
 
 [license]: ./LICENSE "Project License: MPL-2.0"
 [license-badge]: https://img.shields.io/badge/License-MPL--2.0-blue
