@@ -1,9 +1,29 @@
+<!-- Badges Config -->
+
+[jitpack]: https://jitpack.io/#community.leaf/tasks "Get maven artifacts on JitPack"
+[jitpack-version-badge]: https://jitpack.io/v/community.leaf/tasks.svg
+
+[jitpack-downloads]: https://jitpack.io/#community.leaf/tasks "JitPack downloads this month"
+[jitpack-downloads-badge]: https://img.shields.io/badge/dynamic/json?url=https://jitpack.io/api/downloads/community.leaf/tasks&label=Downloads&query=$.month&color=ok
+
+[license]: ./LICENSE "Project License: MPL-2.0"
+[license-badge]: https://img.shields.io/badge/License-MPL--2.0-blue
+
+[java-version]: # "Java Version: 11"
+[java-version-badge]: https://img.shields.io/badge/Java-11-orange
+
+[latest-javadoc]: https://javadoc.jitpack.io/community/leaf/tasks/tasks-parent/latest/javadoc/ "View latest javadoc"
+[javadoc-badge]: https://img.shields.io/badge/dynamic/json?url=https://jitpack.io/api/builds/community.leaf/tasks/latestOk&label=Javadoc&query=$.version&color=%234D7A97
+
+<!-- Header & Badges -->
+
 # 📅 Tasks
 
-[![](https://jitpack.io/v/community.leaf/tasks.svg)](https://jitpack.io/#community.leaf/tasks "Get maven artifacts on JitPack")
-[![](https://img.shields.io/badge/License-MPL--2.0-blue)](./LICENSE "Project License: MPL-2.0")
-[![](https://img.shields.io/badge/Java-11-orange)](# "Java Version: 11")
-[![](https://img.shields.io/badge/View-Javadocs-%234D7A97)](https://javadoc.jitpack.io/community/leaf/tasks/tasks-parent/latest/javadoc/ "View Javadocs")
+[![][jitpack-version-badge]][jitpack]
+[![][jitpack-downloads-badge]][jitpack-downloads]
+[![][license-badge]][license]
+[![][java-version-badge]][java-version]
+[![][javadoc-badge]][latest-javadoc]
 
 Build and schedule tasks.
 
@@ -11,18 +31,18 @@ Build and schedule tasks.
 
 ```xml
 <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
 </repositories>
 ```
 
 ```xml
 <dependency>
-    <groupId>community.leaf.tasks</groupId>
-    <artifactId><!--module--></artifactId>
-    <version><!--release--></version>
+  <groupId>community.leaf.tasks</groupId>
+  <artifactId><!--module--></artifactId>
+  <version><!--release--></version>
 </dependency>
 ```
 
@@ -44,4 +64,3 @@ If you intend to shade this library, please consider **relocating** the packages
 to avoid potential conflicts with other projects. This library also utilizes
 nullness annotations, which may be undesirable in a shaded uber-jar. They can
 safely be excluded, and you are encouraged to do so.
-
