@@ -12,11 +12,9 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.TaskScheduler;
 
 final class MinecraftTaskBuilderImpl<T>
-    extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
-    implements MinecraftTaskBuilder<T>
-{
-    MinecraftTaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency)
-    {
-        super(scheduler, concurrency, Ticks::pending);
-    }
+	extends AbstractTaskBuilder<T, MinecraftTaskBuilder<T>, Ticks<MinecraftTaskBuilder<T>>>
+	implements MinecraftTaskBuilder<T> {
+	MinecraftTaskBuilderImpl(TaskScheduler<T> scheduler, Concurrency concurrency) {
+		super(scheduler, concurrency, Ticks::pending);
+	}
 }

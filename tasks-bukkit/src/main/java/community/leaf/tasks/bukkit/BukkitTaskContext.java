@@ -12,19 +12,23 @@ import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
 import org.bukkit.scheduler.BukkitTask;
 
-final class BukkitTaskContext extends AbstractTaskContext<BukkitTask>
-{
-    BukkitTaskContext(Schedule schedule) { super(schedule); }
-    
-    @Override
-    public boolean isCancelled() { return task().isCancelled(); }
-    
-    @Override
-    public void cancel() { task().cancel(); }
-    
-    @Override
-    public Concurrency concurrency()
-    {
-        return (task().isSync()) ? Concurrency.SYNC : Concurrency.ASYNC;
-    }
+final class BukkitTaskContext extends AbstractTaskContext<BukkitTask> {
+	BukkitTaskContext(Schedule schedule) {
+		super(schedule);
+	}
+	
+	@Override
+	public boolean isCancelled() {
+		return task().isCancelled();
+	}
+	
+	@Override
+	public void cancel() {
+		task().cancel();
+	}
+	
+	@Override
+	public Concurrency concurrency() {
+		return (task().isSync()) ? Concurrency.SYNC : Concurrency.ASYNC;
+	}
 }

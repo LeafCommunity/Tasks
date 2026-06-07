@@ -11,22 +11,20 @@ import community.leaf.tasks.Unless;
 
 import java.util.Optional;
 
-public interface PlayerSessionManager<P>
-{
-    PlayerSession start(P player);
-    
-    Optional<PlayerSession> get(P player);
-    
-    PlayerSession getOrStart(P player);
-    
-    void end(P player);
-    
-    void endAll();
-    
-    Unless expired(P player);
-    
-    interface Source<P>
-    {
-        PlayerSessionManager<P> sessions();
-    }
+public interface PlayerSessionManager<P> {
+	PlayerSession start(P player);
+	
+	Optional<PlayerSession> get(P player);
+	
+	PlayerSession getOrStart(P player);
+	
+	void end(P player);
+	
+	void endAll();
+	
+	Unless expired(P player);
+	
+	interface Source<P> {
+		PlayerSessionManager<P> sessions();
+	}
 }

@@ -10,25 +10,23 @@ package community.leaf.tasks;
 import java.util.function.LongFunction;
 
 @SuppressWarnings("unused")
-public interface Pending<B>
-{
-    static <B> Pending<B> milliseconds(LongFunction<B> function, long units)
-    {
-        return new AbstractPending<>(function, units) {};
-    }
-    
-    B milliseconds();
-    
-    B seconds();
-    
-    B minutes();
-    
-    B hours();
-    
-    B days();
-    
-    interface Constructor<B, P extends Pending<B>>
-    {
-        P construct(LongFunction<B> function, long units);
-    }
+public interface Pending<B> {
+	static <B> Pending<B> milliseconds(LongFunction<B> function, long units) {
+		return new AbstractPending<>(function, units) {
+		};
+	}
+	
+	B milliseconds();
+	
+	B seconds();
+	
+	B minutes();
+	
+	B hours();
+	
+	B days();
+	
+	interface Constructor<B, P extends Pending<B>> {
+		P construct(LongFunction<B> function, long units);
+	}
 }

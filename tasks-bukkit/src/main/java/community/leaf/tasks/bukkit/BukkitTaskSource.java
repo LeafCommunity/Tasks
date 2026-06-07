@@ -14,19 +14,16 @@ import org.bukkit.scheduler.BukkitTask;
 
 @FunctionalInterface
 public interface BukkitTaskSource extends
-    BukkitPlayerSessionManager.Source,
-    PluginSource,
-    TaskSource.Concurrent<BukkitTask, MinecraftTaskBuilder<BukkitTask>>
-{
-    @Override
-    default BukkitTaskScheduler getTaskScheduler()
-    {
-        return this::plugin;
-    }
-    
-    @Override
-    default ScheduledTaskBuilder.Constructor<BukkitTask, MinecraftTaskBuilder<BukkitTask>> getTaskBuilderConstructor()
-    {
-        return MinecraftTaskBuilder::builder;
-    }
+	BukkitPlayerSessionManager.Source,
+	PluginSource,
+	TaskSource.Concurrent<BukkitTask, MinecraftTaskBuilder<BukkitTask>> {
+	@Override
+	default BukkitTaskScheduler getTaskScheduler() {
+		return this::plugin;
+	}
+	
+	@Override
+	default ScheduledTaskBuilder.Constructor<BukkitTask, MinecraftTaskBuilder<BukkitTask>> getTaskBuilderConstructor() {
+		return MinecraftTaskBuilder::builder;
+	}
 }

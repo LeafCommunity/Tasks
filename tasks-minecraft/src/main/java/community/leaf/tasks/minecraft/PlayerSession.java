@@ -7,11 +7,12 @@
  */
 package community.leaf.tasks.minecraft;
 
-public interface PlayerSession
-{
-    void end();
-    
-    boolean isActive();
-    
-    default boolean isExpired() { return !isActive(); }
+public interface PlayerSession {
+	void end();
+	
+	boolean isActive();
+	
+	default boolean isExpired() {
+		return !isActive();
+	}
 }

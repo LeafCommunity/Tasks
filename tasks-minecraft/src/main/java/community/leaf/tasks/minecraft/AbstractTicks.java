@@ -12,16 +12,13 @@ import community.leaf.tasks.AbstractPending;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongFunction;
 
-public abstract class AbstractTicks<B> extends AbstractPending<B> implements Ticks<B>
-{
-    protected AbstractTicks(LongFunction<B> pendingFunction, long units)
-    {
-        super(pendingFunction, units);
-    }
-    
-    @Override
-    public B ticks()
-    {
-        return applyMilliseconds(Ticks.convertToUnit(super.units, TimeUnit.MILLISECONDS));
-    }
+public abstract class AbstractTicks<B> extends AbstractPending<B> implements Ticks<B> {
+	protected AbstractTicks(LongFunction<B> pendingFunction, long units) {
+		super(pendingFunction, units);
+	}
+	
+	@Override
+	public B ticks() {
+		return applyMilliseconds(Ticks.convertToUnit(super.units, TimeUnit.MILLISECONDS));
+	}
 }

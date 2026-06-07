@@ -13,28 +13,23 @@ import community.leaf.tasks.Schedule;
 
 import java.util.concurrent.Future;
 
-final class ExecutorTaskContext extends AbstractTaskContext<Future<?>>
-{
-    ExecutorTaskContext(Schedule schedule)
-    {
-        super(schedule);
-    }
-    
-    @Override
-    public Concurrency concurrency()
-    {
-        return schedule().concurrency();
-    }
-    
-    @Override
-    public boolean isCancelled()
-    {
-        return task().isDone();
-    }
-    
-    @Override
-    public void cancel()
-    {
-        task().cancel(false);
-    }
+final class ExecutorTaskContext extends AbstractTaskContext<Future<?>> {
+	ExecutorTaskContext(Schedule schedule) {
+		super(schedule);
+	}
+	
+	@Override
+	public Concurrency concurrency() {
+		return schedule().concurrency();
+	}
+	
+	@Override
+	public boolean isCancelled() {
+		return task().isDone();
+	}
+	
+	@Override
+	public void cancel() {
+		task().cancel(false);
+	}
 }

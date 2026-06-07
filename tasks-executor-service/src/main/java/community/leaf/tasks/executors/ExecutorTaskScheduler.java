@@ -16,29 +16,24 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @FunctionalInterface
-public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskScheduler<Future<?>>
-{
-    @Override
-    default TaskContext<Future<?>> context(Schedule schedule)
-    {
-        return new ExecutorTaskContext(schedule);
-    }
-    
-    @Override
-    default Future<?> now(Concurrency concurrency, Runnable runnable)
-    {
-        return executor(concurrency).submit(runnable);
-    }
-    
-    @Override
-    default Future<?> future(Concurrency concurrency, Runnable runnable, long delay)
-    {
-        return executor(concurrency).schedule(runnable, delay, TimeUnit.MILLISECONDS);
-    }
-    
-    @Override
-    default Future<?> repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
-    {
-        return executor(concurrency).scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
-    }
+public interface ExecutorTaskScheduler extends ExecutorServiceSource, TaskScheduler<Future<?>> {
+	@Override
+	default TaskContext<Future<?>> context(Schedule schedule) {
+		return new ExecutorTaskContext(schedule);
+	}
+	
+	@Override
+	default Future<?> now(Concurrency concurrency, Runnable runnable) {
+		return executor(concurrency).submit(runnable);
+	}
+	
+	@Override
+	default Future<?> future(Concurrency concurrency, Runnable runnable, long delay) {
+		return executor(concurrency).schedule(runnable, delay, TimeUnit.MILLISECONDS);
+	}
+	
+	@Override
+	default Future<?> repeat(Concurrency concurrency, Runnable runnable, long delay, long period) {
+		return executor(concurrency).scheduleAtFixedRate(runnable, delay, period, TimeUnit.MILLISECONDS);
+	}
 }

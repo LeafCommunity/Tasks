@@ -7,9 +7,9 @@
  */
 module community.leaf.tasks.bukkit
 {
-    requires transitive community.leaf.tasks.minecraft;
-    requires static pl.tlinkowski.annotation.basic;
-    requires org.bukkit;
-    
-    exports community.leaf.tasks.bukkit;
+	requires transitive community.leaf.tasks.minecraft;
+	requires static pl.tlinkowski.annotation.basic;
+	requires org.bukkit;
+	
+	exports community.leaf.tasks.bukkit;
 }

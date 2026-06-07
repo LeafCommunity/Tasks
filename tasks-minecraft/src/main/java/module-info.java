@@ -7,8 +7,8 @@
  */
 module community.leaf.tasks.minecraft
 {
-    requires transitive community.leaf.tasks;
-    requires static pl.tlinkowski.annotation.basic;
-    
-    exports community.leaf.tasks.minecraft;
+	requires transitive community.leaf.tasks;
+	requires static pl.tlinkowski.annotation.basic;
+	
+	exports community.leaf.tasks.minecraft;
 }

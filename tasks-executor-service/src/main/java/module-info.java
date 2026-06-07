@@ -7,8 +7,8 @@
  */
 module community.leaf.tasks.executors
 {
-    requires transitive community.leaf.tasks;
-    requires static pl.tlinkowski.annotation.basic;
-    
-    exports community.leaf.tasks.executors;
+	requires transitive community.leaf.tasks;
+	requires static pl.tlinkowski.annotation.basic;
+	
+	exports community.leaf.tasks.executors;
 }

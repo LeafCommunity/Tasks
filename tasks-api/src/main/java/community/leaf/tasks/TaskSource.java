@@ -7,27 +7,22 @@
  */
 package community.leaf.tasks;
 
-public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B>>
-{
-    TaskScheduler<T> getTaskScheduler();
-    
-    ScheduledTaskBuilder.Constructor<T, B> getTaskBuilderConstructor();
-    
-    interface Async<T, B extends ScheduledTaskBuilder<T, B>> extends TaskSource<T, B>
-    {
-        default B async()
-        {
-            return getTaskBuilderConstructor().construct(getTaskScheduler(), Concurrency.ASYNC);
-        }
-    }
-    
-    interface Sync<T, B extends ScheduledTaskBuilder<T, B>> extends TaskSource<T, B>
-    {
-        default B sync()
-        {
-            return getTaskBuilderConstructor().construct(getTaskScheduler(), Concurrency.SYNC);
-        }
-    }
-    
-    interface Concurrent<T, B extends ScheduledTaskBuilder<T, B>> extends Async<T, B>, Sync<T, B> {}
+public interface TaskSource<T, B extends ScheduledTaskBuilder<T, B>> {
+	TaskScheduler<T> getTaskScheduler();
+	
+	ScheduledTaskBuilder.Constructor<T, B> getTaskBuilderConstructor();
+	
+	interface Async<T, B extends ScheduledTaskBuilder<T, B>> extends TaskSource<T, B> {
+		default B async() {
+			return getTaskBuilderConstructor().construct(getTaskScheduler(), Concurrency.ASYNC);
+		}
+	}
+	
+	interface Sync<T, B extends ScheduledTaskBuilder<T, B>> extends TaskSource<T, B> {
+		default B sync() {
+			return getTaskBuilderConstructor().construct(getTaskScheduler(), Concurrency.SYNC);
+		}
+	}
+	
+	interface Concurrent<T, B extends ScheduledTaskBuilder<T, B>> extends Async<T, B>, Sync<T, B> {}
 }

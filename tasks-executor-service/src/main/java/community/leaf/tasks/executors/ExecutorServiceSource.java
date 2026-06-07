@@ -12,7 +12,6 @@ import community.leaf.tasks.Concurrency;
 import java.util.concurrent.ScheduledExecutorService;
 
 @FunctionalInterface
-public interface ExecutorServiceSource
-{
-    ScheduledExecutorService executor(Concurrency concurrency);
+public interface ExecutorServiceSource {
+	ScheduledExecutorService executor(Concurrency concurrency);
 }

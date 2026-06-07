@@ -8,43 +8,47 @@
 package community.leaf.tasks;
 
 @SuppressWarnings("unused")
-public interface TaskContext<T> extends Schedule.Source
-{
-    Concurrency concurrency();
-    
-    long iterations();
-    
-    void iterate();
-    
-    boolean isCancelled();
-    
-    void cancel();
-    
-    T task();
-    
-    void task(T task);
-    
-    default boolean isRepeatingForever() { return schedule().repeats().until() == Repeats.FOREVER; }
-    
-    default boolean isRepeatingFinitely() { return schedule().repeats().until() == Repeats.FINITE; }
-    
-    default boolean isRepeating() { return schedule().repeats().until() != Repeats.NEVER; }
-    
-    default boolean isDoneRepeating()
-    {
-        Repeats.Expected repeats = schedule().repeats();
-        return (isCancelled())
-            || (repeats.until() == Repeats.NEVER && iterations() > repeats.repetitions())
-            || (repeats.until() == Repeats.FINITE && iterations() >= repeats.repetitions());
-    }
-    
-    default boolean isFirstIteration() { return iterations() == 0; }
-    
-    default boolean isLastIteration()
-    {
-        Repeats.Expected repeats = schedule().repeats();
-        return (repeats.until() == Repeats.NEVER)
-            || (repeats.until() == Repeats.FINITE && iterations() == repeats.repetitions() - 1);
-    }
-    
+public interface TaskContext<T> extends Schedule.Source {
+	Concurrency concurrency();
+	
+	long iterations();
+	
+	void iterate();
+	
+	boolean isCancelled();
+	
+	void cancel();
+	
+	T task();
+	
+	void task(T task);
+	
+	default boolean isRepeatingForever() {
+		return schedule().repeats().until() == Repeats.FOREVER;
+	}
+	
+	default boolean isRepeatingFinitely() {
+		return schedule().repeats().until() == Repeats.FINITE;
+	}
+	
+	default boolean isRepeating() {
+		return schedule().repeats().until() != Repeats.NEVER;
+	}
+	
+	default boolean isDoneRepeating() {
+		Repeats.Expected repeats = schedule().repeats();
+		return (isCancelled())
+			|| (repeats.until() == Repeats.NEVER && iterations() > repeats.repetitions())
+			|| (repeats.until() == Repeats.FINITE && iterations() >= repeats.repetitions());
+	}
+	
+	default boolean isFirstIteration() {
+		return iterations() == 0;
+	}
+	
+	default boolean isLastIteration() {
+		Repeats.Expected repeats = schedule().repeats();
+		return (repeats.until() == Repeats.NEVER)
+			|| (repeats.until() == Repeats.FINITE && iterations() == repeats.repetitions() - 1);
+	}
 }

@@ -19,64 +19,53 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.concurrent.TimeUnit;
 
 @FunctionalInterface
-public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitTask>
-{
-    @Override
-    default TaskContext<BukkitTask> context(Schedule schedule)
-    {
-        return new BukkitTaskContext(schedule);
-    }
-    
-    @Override
-    default BukkitTask now(Concurrency concurrency, Runnable runnable)
-    {
-        Plugin plugin = plugin();
-        BukkitScheduler scheduler = plugin.getServer().getScheduler();
-    
-        if (concurrency == Concurrency.SYNC)
-        {
-            return scheduler.runTask(plugin, runnable);
-        }
-        else
-        {
-            return scheduler.runTaskAsynchronously(plugin, runnable);
-        }
-    }
-    
-    @Override
-    default BukkitTask future(Concurrency concurrency, Runnable runnable, long delay)
-    {
-        Plugin plugin = plugin();
-        BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        
-        long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
-        
-        if (concurrency == Concurrency.SYNC)
-        {
-            return scheduler.runTaskLater(plugin, runnable, delayInTicks);
-        }
-        else
-        {
-            return scheduler.runTaskLaterAsynchronously(plugin, runnable, delayInTicks);
-        }
-    }
-    
-    @Override
-    default BukkitTask repeat(Concurrency concurrency, Runnable runnable, long delay, long period)
-    {
-        Plugin plugin = plugin();
-        BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        
-        long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
-        long periodInTicks = Ticks.of(period, TimeUnit.MILLISECONDS);
-    
-        if (concurrency == Concurrency.SYNC)
-        {
-            return scheduler.runTaskTimer(plugin, runnable, delayInTicks, periodInTicks);
-        }
-        else
-        {
-            return scheduler.runTaskTimerAsynchronously(plugin, runnable, delayInTicks, periodInTicks);
-        }
-    }
+public interface BukkitTaskScheduler extends PluginSource, TaskScheduler<BukkitTask> {
+	@Override
+	default TaskContext<BukkitTask> context(Schedule schedule) {
+		return new BukkitTaskContext(schedule);
+	}
+	
+	@Override
+	default BukkitTask now(Concurrency concurrency, Runnable runnable) {
+		Plugin plugin = plugin();
+		BukkitScheduler scheduler = plugin.getServer().getScheduler();
+		
+		if (concurrency == Concurrency.SYNC) {
+			return scheduler.runTask(plugin, runnable);
+		}
+		else {
+			return scheduler.runTaskAsynchronously(plugin, runnable);
+		}
+	}
+	
+	@Override
+	default BukkitTask future(Concurrency concurrency, Runnable runnable, long delay) {
+		Plugin plugin = plugin();
+		BukkitScheduler scheduler = plugin.getServer().getScheduler();
+		
+		long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
+		
+		if (concurrency == Concurrency.SYNC) {
+			return scheduler.runTaskLater(plugin, runnable, delayInTicks);
+		}
+		else {
+			return scheduler.runTaskLaterAsynchronously(plugin, runnable, delayInTicks);
+		}
+	}
+	
+	@Override
+	default BukkitTask repeat(Concurrency concurrency, Runnable runnable, long delay, long period) {
+		Plugin plugin = plugin();
+		BukkitScheduler scheduler = plugin.getServer().getScheduler();
+		
+		long delayInTicks = Ticks.of(delay, TimeUnit.MILLISECONDS);
+		long periodInTicks = Ticks.of(period, TimeUnit.MILLISECONDS);
+		
+		if (concurrency == Concurrency.SYNC) {
+			return scheduler.runTaskTimer(plugin, runnable, delayInTicks, periodInTicks);
+		}
+		else {
+			return scheduler.runTaskTimerAsynchronously(plugin, runnable, delayInTicks, periodInTicks);
+		}
+	}
 }

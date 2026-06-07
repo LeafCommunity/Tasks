@@ -8,12 +8,10 @@
 package community.leaf.tasks;
 
 @SuppressWarnings("UnusedReturnValue")
-public interface TaskRunner<T>
-{
-    TaskContext<T> run(ContextualRunnable<T> runnable);
-    
-    default TaskContext<T> run(Runnable runnable)
-    {
-        return run(task -> runnable.run());
-    }
+public interface TaskRunner<T> {
+	TaskContext<T> run(ContextualRunnable<T> runnable);
+	
+	default TaskContext<T> run(Runnable runnable) {
+		return run(task -> runnable.run());
+	}
 }

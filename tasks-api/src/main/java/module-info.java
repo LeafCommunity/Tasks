@@ -7,7 +7,7 @@
  */
 module community.leaf.tasks
 {
-    requires static pl.tlinkowski.annotation.basic;
-    
-    exports community.leaf.tasks;
+	requires static pl.tlinkowski.annotation.basic;
+	
+	exports community.leaf.tasks;
 }
