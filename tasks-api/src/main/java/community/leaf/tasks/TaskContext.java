@@ -8,9 +8,7 @@
 package community.leaf.tasks;
 
 @SuppressWarnings("unused")
-public interface TaskContext<T> extends Schedule.Source {
-	Concurrency concurrency();
-	
+public interface TaskContext<T> extends ScheduleSource {
 	long iterations();
 	
 	void iterate();
@@ -36,7 +34,7 @@ public interface TaskContext<T> extends Schedule.Source {
 	}
 	
 	default boolean isDoneRepeating() {
-		Repeats.Expected repeats = schedule().repeats();
+		RepeatsExpected repeats = schedule().repeats();
 		return (isCancelled())
 			|| (repeats.until() == Repeats.NEVER && iterations() > repeats.repetitions())
 			|| (repeats.until() == Repeats.FINITE && iterations() >= repeats.repetitions());
@@ -47,7 +45,7 @@ public interface TaskContext<T> extends Schedule.Source {
 	}
 	
 	default boolean isLastIteration() {
-		Repeats.Expected repeats = schedule().repeats();
+		RepeatsExpected repeats = schedule().repeats();
 		return (repeats.until() == Repeats.NEVER)
 			|| (repeats.until() == Repeats.FINITE && iterations() == repeats.repetitions() - 1);
 	}

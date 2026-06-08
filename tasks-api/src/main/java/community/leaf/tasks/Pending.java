@@ -25,8 +25,4 @@ public interface Pending<B> {
 	B hours();
 	
 	B days();
-	
-	interface Constructor<B, P extends Pending<B>> {
-		P construct(LongFunction<B> function, long units);
-	}
 }

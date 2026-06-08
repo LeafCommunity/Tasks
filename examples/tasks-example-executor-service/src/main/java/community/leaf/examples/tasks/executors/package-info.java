@@ -1,4 +1,4 @@
-@NonNullPackage
+@NullMarked
 package community.leaf.examples.tasks.executors;
 
-import pl.tlinkowski.annotation.basic.NonNullPackage;
+import org.jspecify.annotations.NullMarked;

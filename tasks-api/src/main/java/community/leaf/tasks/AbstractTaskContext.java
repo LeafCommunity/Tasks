@@ -7,7 +7,7 @@
  */
 package community.leaf.tasks;
 
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class AbstractTaskContext<T> implements TaskContext<T> {
 	private final AtomicLong iterations = new AtomicLong();
-	private final AtomicReference<@NullOr T> wrapped = new AtomicReference<>();
+	private final AtomicReference<@Nullable T> wrapped = new AtomicReference<>();
 	
 	private final Schedule schedule;
 	
@@ -40,7 +40,7 @@ public abstract class AbstractTaskContext<T> implements TaskContext<T> {
 	
 	@Override
 	public final T task() {
-		@NullOr T task = wrapped.get();
+		T task = wrapped.get();
 		if (task != null) {
 			return task;
 		}

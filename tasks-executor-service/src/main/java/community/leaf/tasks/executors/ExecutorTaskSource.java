@@ -7,33 +7,9 @@
  */
 package community.leaf.tasks.executors;
 
-import community.leaf.tasks.ScheduledTaskBuilder;
-import community.leaf.tasks.TaskBuilder;
-import community.leaf.tasks.TaskSource;
-
-import java.util.concurrent.Future;
-
 @FunctionalInterface
-public interface ExecutorTaskSource extends ExecutorServiceSource, TaskSource<Future<?>, TaskBuilder<Future<?>>> {
-	@Override
-	default ExecutorTaskScheduler getTaskScheduler() {
-		return this::executor;
-	}
-	
-	@Override
-	default ScheduledTaskBuilder.Constructor<Future<?>, TaskBuilder<Future<?>>> getTaskBuilderConstructor() {
-		return TaskBuilder::builder;
-	}
-	
-	@FunctionalInterface
-	interface Async extends ExecutorTaskSource, TaskSource.Async<Future<?>, TaskBuilder<Future<?>>> {
-	}
-	
-	@FunctionalInterface
-	interface Sync extends ExecutorTaskSource, TaskSource.Sync<Future<?>, TaskBuilder<Future<?>>> {
-	}
-	
-	@FunctionalInterface
-	interface Concurrent extends ExecutorTaskSource, TaskSource.Concurrent<Future<?>, TaskBuilder<Future<?>>> {
+public interface ExecutorTaskSource extends ExecutorServiceSource {
+	default ExecutorTaskBuilder async() {
+		return new ExecutorTaskBuilder(executor());
 	}
 }

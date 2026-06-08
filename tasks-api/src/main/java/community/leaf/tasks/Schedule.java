@@ -7,74 +7,30 @@
  */
 package community.leaf.tasks;
 
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
+@SuppressWarnings("unused")
 public interface Schedule {
-	static Schedule of(Concurrency concurrency, long delay, long period, Repeats.Expected repeats) {
-		return new ScheduleImpl(concurrency, delay, period, repeats);
+	static Schedule of(long delay, long period, RepeatsExpected repeats) {
+		return new ScheduleImpl(delay, period, repeats);
 	}
 	
 	static Schedule immutable(Schedule schedule) {
 		if (schedule instanceof ScheduleImpl) {
 			return schedule;
 		}
-		return of(schedule.concurrency(), schedule.delay(), schedule.period(), schedule.repeats());
+		return of(schedule.delay(), schedule.period(), schedule.repeats());
 	}
-	
-	Concurrency concurrency();
 	
 	long delay();
 	
 	long period();
 	
-	Repeats.Expected repeats();
+	RepeatsExpected repeats();
 	
 	default boolean isDelayed() {
 		return delay() > 0;
 	}
 	
-	interface Source {
-		Schedule schedule();
-	}
-	
-	interface Builder<B extends Builder<B>> extends Source {
-		B delayByMilliseconds(long milliseconds);
-		
-		default B delay(long duration, TimeUnit unit) {
-			return delayByMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
-		}
-		
-		default B delay(Duration duration) {
-			return delayByMilliseconds(duration.toMillis());
-		}
-		
-		Pending<B> delay(long duration);
-		
-		B everyFewMilliseconds(long milliseconds);
-		
-		default B every(long duration, TimeUnit unit) {
-			return everyFewMilliseconds(TimeUnit.MILLISECONDS.convert(duration, unit));
-		}
-		
-		default B every(Duration duration) {
-			return delayByMilliseconds(duration.toMillis());
-		}
-		
-		Pending<B> every(long duration);
-		
-		B repeat(Repeats.Expected repeats);
-		
-		default B repeat(long repetitions) {
-			return repeat(Repeats.expect(repetitions));
-		}
-		
-		default B forever() {
-			return repeat(Repeats.Constantly.FOREVER);
-		}
-		
-		default B once() {
-			return repeat(Repeats.Constantly.NEVER);
-		}
+	default boolean isRepeating() {
+		return repeats().until() != Repeats.NEVER;
 	}
 }

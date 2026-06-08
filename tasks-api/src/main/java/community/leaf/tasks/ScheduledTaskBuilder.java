@@ -8,8 +8,6 @@
 package community.leaf.tasks;
 
 public interface ScheduledTaskBuilder<T, B extends ScheduledTaskBuilder<T, B>>
-	extends Schedule.Builder<B>, TaskRunner<T>, Unless.Builder<B> {
-	interface Constructor<T, B extends ScheduledTaskBuilder<T, B>> {
-		B construct(TaskScheduler<T> scheduler, Concurrency concurrency);
-	}
+	extends ScheduleBuilder<B>,
+	TaskRunner<T> {
 }

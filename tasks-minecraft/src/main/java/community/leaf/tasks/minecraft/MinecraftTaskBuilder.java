@@ -7,15 +7,9 @@
  */
 package community.leaf.tasks.minecraft;
 
-import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.ScheduledTaskBuilder;
-import community.leaf.tasks.TaskScheduler;
 
 public interface MinecraftTaskBuilder<T> extends ScheduledTaskBuilder<T, MinecraftTaskBuilder<T>> {
-	static <T> MinecraftTaskBuilder<T> builder(TaskScheduler<T> scheduler, Concurrency concurrency) {
-		return new MinecraftTaskBuilderImpl<>(scheduler, concurrency);
-	}
-	
 	@Override
 	Ticks<MinecraftTaskBuilder<T>> delay(long duration);
 	

@@ -16,8 +16,7 @@ import java.util.function.LongFunction;
 
 public interface Ticks<B> extends Pending<B> {
 	static <B> Ticks<B> pending(LongFunction<B> function, long units) {
-		return new AbstractTicks<>(function, units) {
-		};
+		return new AbstractTicks<>(function, units) {};
 	}
 	
 	B ticks();

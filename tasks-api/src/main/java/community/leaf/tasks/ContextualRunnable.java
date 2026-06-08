@@ -10,4 +10,15 @@ package community.leaf.tasks;
 @FunctionalInterface
 public interface ContextualRunnable<T> {
 	void run(TaskContext<T> task);
+	
+	default Runnable wrapWithContext(TaskContext<T> context) {
+		return () -> {
+			run(context);
+			context.iterate();
+			
+			if (context.isDoneRepeating() && !context.isCancelled()) {
+				context.cancel();
+			}
+		};
+	}
 }

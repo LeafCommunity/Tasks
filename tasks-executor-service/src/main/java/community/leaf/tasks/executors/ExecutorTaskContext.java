@@ -8,7 +8,6 @@
 package community.leaf.tasks.executors;
 
 import community.leaf.tasks.AbstractTaskContext;
-import community.leaf.tasks.Concurrency;
 import community.leaf.tasks.Schedule;
 
 import java.util.concurrent.Future;
@@ -16,11 +15,6 @@ import java.util.concurrent.Future;
 final class ExecutorTaskContext extends AbstractTaskContext<Future<?>> {
 	ExecutorTaskContext(Schedule schedule) {
 		super(schedule);
-	}
-	
-	@Override
-	public Concurrency concurrency() {
-		return schedule().concurrency();
 	}
 	
 	@Override
